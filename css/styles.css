@@ -1,0 +1,143 @@
+/* カスタムスタイル */
+.nav-btn.active {
+    background-color: #10b981;
+    color: white;
+}
+
+.nav-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.nav-btn.active:hover {
+    background-color: #059669;
+}
+
+/* カードホバーエフェクト */
+.account-card {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.account-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* アニメーション */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* セレクトボックスのスタイル */
+.custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* チェックボックスのスタイル */
+.custom-checkbox {
+    accent-color: #ea580c;
+}
+
+/* スクロールバーのスタイル */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 画像の遅延読み込み */
+.lazy-image {
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.lazy-image.loaded {
+    opacity: 1;
+}
+
+/* モーダルアニメーション */
+.modal-enter {
+    animation: modalEnter 0.3s ease-out;
+}
+
+@keyframes modalEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 768px) {
+    .grid-cols-responsive {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .grid-cols-responsive {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-cols-responsive {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* バッジの色 */
+.badge-飲食 { @apply bg-orange-100 text-orange-800 border-orange-200; }
+.badge-美容 { @apply bg-pink-100 text-pink-800 border-pink-200; }
+.badge-小売 { @apply bg-blue-100 text-blue-800 border-blue-200; }
+.badge-医療・健康 { @apply bg-red-100 text-red-800 border-red-200; }
+.badge-教育 { @apply bg-purple-100 text-purple-800 border-purple-200; }
+.badge-不動産 { @apply bg-indigo-100 text-indigo-800 border-indigo-200; }
+.badge-士業・コンサル { @apply bg-gray-100 text-gray-800 border-gray-200; }
+.badge-エンタメ { @apply bg-yellow-100 text-yellow-800 border-yellow-200; }
+.badge-自治体・公共 { @apply bg-green-100 text-green-800 border-green-200; }
+.badge-その他 { @apply bg-slate-100 text-slate-800 border-slate-200; }
+
+/* 詳細カテゴリのバッジ色 */
+.badge-ラーメン { @apply bg-orange-100 text-orange-800 border-orange-200; }
+.badge-寿司 { @apply bg-red-100 text-red-800 border-red-200; }
+.badge-焼肉 { @apply bg-amber-100 text-amber-800 border-amber-200; }
+.badge-イタリアン { @apply bg-green-100 text-green-800 border-green-200; }
+.badge-フレンチ { @apply bg-purple-100 text-purple-800 border-purple-200; }
+.badge-中華料理 { @apply bg-yellow-100 text-yellow-800 border-yellow-200; }
+.badge-カフェ { @apply bg-amber-100 text-amber-800 border-amber-200; }
+.badge-居酒屋 { @apply bg-orange-100 text-orange-800 border-orange-200; }
+.badge-バー { @apply bg-indigo-100 text-indigo-800 border-indigo-200; }
+.badge-ファストフード { @apply bg-red-100 text-red-800 border-red-200; }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE公式アカウント検索</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-green-50/20 to-gray-50 min-h-screen">
+    <div id="app" class="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <!-- ローディング画面 -->
+        <div id="loading" class="text-center py-16">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <p class="text-gray-600">読み込み中...</p>
+        </div>
+        
+        <!-- メインコンテンツ -->
+        <div id="main-content" class="hidden">
+            <!-- ヘッダー -->
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-black text-gray-900 mb-4">
+                    🔍 LINE公式アカウント検索
+                </h1>
+                <p class="text-lg text-gray-600">
+                    お得な特典がもらえるLINE公式アカウントを見つけよう！
+                </p>
+            </header>
+            
+            <!-- ナビゲーション -->
+            <nav class="flex justify-center mb-8">
+                <div class="bg-white rounded-lg shadow-md p-1 flex">
+                    <button id="nav-search" class="nav-btn active px-6 py-3 rounded-md font-medium transition-all">
+                        検索
+                    </button>
+                    <button id="nav-favorites" class="nav-btn px-6 py-3 rounded-md font-medium transition-all">
+                        お気に入り
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- 検索フォーム -->
+            <div id="search-form" class="mb-8">
+                <!-- SearchFormコンポーネントがここに挿入される -->
+            </div>
+            
+            <!-- 検索結果 -->
+            <div id="search-results">
+                <!-- SearchResultsコンポーネントがここに挿入される -->
+            </div>
+            
+            <!-- お気に入りページ -->
+            <div id="favorites-page" class="hidden">
+                <!-- Favoritesコンポーネントがここに挿入される -->
+            </div>
+        </div>
+        
+        <!-- 詳細モーダル -->
+        <div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-y-auto">
+            <div class="min-h-screen px-4 py-8">
+                <div class="bg-white rounded-lg max-w-5xl mx-auto">
+                    <div id="detail-content">
+                        <!-- Detailコンポーネントがここに挿入される -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="js/data.js"></script>
+    <script src="js/components/SearchForm.js"></script>
+    <script src="js/components/SearchResults.js"></script>
+    <script src="js/components/AccountCard.js"></script>
+    <script src="js/components/Detail.js"></script>
+    <script src="js/components/Favorites.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
