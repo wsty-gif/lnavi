@@ -63,7 +63,7 @@ class SearchResults {
         return `
             <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in" data-account-id="${account.id}">
                 <div class="relative">
-                    <img src="${account.image}" alt="${account.name}" class="w-full h-48 object-cover">
+                    <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
                     <button class="favorite-btn absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors" data-account-id="${account.id}">
                         ${isFavorite ? 
                             '<i data-lucide="heart" class="w-5 h-5 text-red-500 fill-current"></i>' : 
@@ -72,14 +72,14 @@ class SearchResults {
                     </button>
                 </div>
                 <div class="p-4 account-card-content">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.name}</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
                     <div class="flex flex-wrap gap-2 mb-3">
-                        <span class="badge-${account.category} px-3 py-1 rounded-full text-sm font-medium">
-                            ${account.category}
+                        <span class="badge-${account.service_category_main} px-3 py-1 rounded-full text-sm font-medium">
+                            ${account.service_category_main}
                         </span>
-                        ${account.detailCategory ? `
-                            <span class="badge-${account.detailCategory} px-3 py-1 rounded-full text-sm font-medium">
-                                ${account.detailCategory}
+                        ${account.service_category_detail ? `
+                            <span class="badge-${account.service_category_detail} px-3 py-1 rounded-full text-sm font-medium">
+                                ${account.service_category_detail}
                             </span>
                         ` : ''}
                     </div>
@@ -87,7 +87,7 @@ class SearchResults {
                     <div class="mt-auto">
                         <div class="flex items-center text-orange-600 font-medium">
                             <i data-lucide="gift" class="w-4 h-4 mr-1"></i>
-                            <span class="text-sm">${account.benefit}</span>
+                            <span class="text-sm">${account.line_benefits}</span>
                         </div>
                     </div>
                 </div>
