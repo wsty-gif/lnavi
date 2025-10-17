@@ -188,7 +188,7 @@
     clear: both;
 }
 
-/* LINE友だち追加ボタンのサイズ調整 */
+LINE友だち追加ボタンのサイズ調整
 .line-add-btn {
     height: 36px;
     width: auto;
@@ -203,4 +203,5 @@
 
 #line_add {
     height: 50px;
+    opacity: 0.9;
 }
