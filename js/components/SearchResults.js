@@ -4,125 +4,124 @@ class SearchResults {
         this.container = container;
         this.accounts = [];
         this.isLoading = false;
-        this.hasSearched = false;
-        this.favorites = [];
-        this.onToggleFavorite = options.onToggleFavorite || (() => {});
+        this.isEmpty = false;
         this.onAccountClick = options.onAccountClick || (() => {});
-        
-        this.loadFavorites();
+        this.onToggleFavorite = options.onToggleFavorite || (() => {});
     }
     
-    loadFavorites() {
-        const savedFavorites = localStorage.getItem('line_account_favorites');
-        this.favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-    }
-    
-    setAccounts(accounts, isLoading = false, hasSearched = true) {
+    show(accounts) {
         this.accounts = accounts;
-        this.isLoading = isLoading;
-        this.hasSearched = hasSearched;
-        this.loadFavorites();
+        this.isEmpty = accounts.length === 0;
+        this.isLoading = false;
+        this.render();
+        this.bindEvents();
+    }
+    
+    showLoading() {
+        this.isLoading = true;
         this.render();
     }
     
     render() {
         if (this.isLoading) {
             this.container.innerHTML = `
-                <div class="grid grid-cols-responsive gap-6">
-                    ${Array(6).fill(0).map((_, i) => `
-                        <div class="h-80 bg-gray-100 rounded-lg animate-pulse"></div>
-                    `).join('')}
-                </div>
-            `;
-            return;
-        }
-        
-        if (!this.hasSearched) {
-            this.container.innerHTML = `
                 <div class="text-center py-16">
-                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
-                        <span class="text-3xl">🔍</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">
-                        検索を開始してください
-                    </h3>
-                    <p class="text-gray-500">
-                        上の検索フォームから地域やサービスを選択して検索できます
-                    </p>
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+                    <p class="text-gray-600">検索中...</p>
                 </div>
             `;
             return;
         }
         
-        if (this.accounts.length === 0) {
+        if (this.isEmpty) {
             this.container.innerHTML = `
-                <div class="border-2 border-orange-300 bg-orange-50 rounded-xl p-6 flex items-start gap-3">
-                    <i data-lucide="alert-circle" class="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5"></i>
-                    <div class="text-orange-900 font-medium text-base">
-                        条件に一致するLINE公式アカウントが見つかりませんでした。<br>
-                        検索条件を変更してもう一度お試しください。
-                    </div>
+                <div class="text-center py-16 bg-white rounded-lg shadow-md">
+                    <div class="text-6xl mb-4">🔍</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">検索結果が見つかりませんでした</h3>
+                    <p class="text-gray-600">条件を変更して再度検索してください</p>
                 </div>
             `;
-            
-            // Lucideアイコンを更新
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
             return;
         }
         
         this.container.innerHTML = `
-            <div class="space-y-6">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">
-                        検索結果 (${this.accounts.length}件)
-                    </h2>
-                    <div class="text-sm text-gray-500">
-                        ${this.accounts.filter(acc => this.favorites.includes(acc.id)).length}件がお気に入りに登録済み
-                    </div>
+            <div class="mb-4">
+                <p class="text-gray-600">
+                    <span class="font-bold text-lg text-green-600">${this.accounts.length}</span> 件のアカウントが見つかりました
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="accounts-grid">
+                ${this.accounts.map(account => this.renderAccountCard(account)).join('')}
+            </div>
+        `;
+    }
+    
+    renderAccountCard(account) {
+        const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
+        const isFavorite = favorites.includes(account.id);
+        
+        return `
+            <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in" data-account-id="${account.id}">
+                <div class="relative">
+                    <img src="${account.image}" alt="${account.name}" class="w-full h-48 object-cover">
+                    <button class="favorite-btn absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors" data-account-id="${account.id}">
+                        ${isFavorite ? 
+                            '<i data-lucide="heart" class="w-5 h-5 text-red-500 fill-current"></i>' : 
+                            '<i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>'
+                        }
+                    </button>
                 </div>
-                <div class="grid grid-cols-responsive gap-6">
-                    ${this.accounts.map((account, index) => `
-                        <div data-account-card="${account.id}">
-                            ${new AccountCard(account, {
-                                index,
-                                isFavorite: this.favorites.includes(account.id),
-                                onToggleFavorite: this.onToggleFavorite,
-                                onAccountClick: this.onAccountClick
-                            }).render()}
+                <div class="p-4 account-card-content">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.name}</h3>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="badge-${account.category} px-3 py-1 rounded-full text-sm font-medium">
+                            ${account.category}
+                        </span>
+                        ${account.detailCategory ? `
+                            <span class="badge-${account.detailCategory} px-3 py-1 rounded-full text-sm font-medium">
+                                ${account.detailCategory}
+                            </span>
+                        ` : ''}
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">${account.description}</p>
+                    <div class="mt-auto">
+                        <div class="flex items-center text-orange-600 font-medium">
+                            <i data-lucide="gift" class="w-4 h-4 mr-1"></i>
+                            <span class="text-sm">${account.benefit}</span>
                         </div>
-                    `).join('')}
+                    </div>
                 </div>
             </div>
         `;
+    }
+    
+    bindEvents() {
+        // アカウントカードのクリックイベント
+        const cards = this.container.querySelectorAll('.account-card');
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // お気に入りボタンのクリックは除外
+                if (e.target.closest('.favorite-btn')) {
+                    return;
+                }
+                const accountId = card.dataset.accountId;
+                this.onAccountClick(accountId);
+            });
+        });
         
-        // カードのイベントバインド
-        this.bindCardEvents();
+        // お気に入りボタンのクリックイベント
+        const favoriteBtns = this.container.querySelectorAll('.favorite-btn');
+        favoriteBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const accountId = btn.dataset.accountId;
+                this.onToggleFavorite(accountId);
+            });
+        });
         
-        // Lucideアイコンを更新
+        // Lucideアイコンの初期化
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
-    }
-    
-    bindCardEvents() {
-        this.accounts.forEach((account, index) => {
-            const cardElement = this.container.querySelector(`[data-account-card="${account.id}"]`);
-            if (cardElement) {
-                const card = new AccountCard(account, {
-                    index,
-                    isFavorite: this.favorites.includes(account.id),
-                    onToggleFavorite: this.onToggleFavorite,
-                    onAccountClick: this.onAccountClick
-                });
-                card.bindEvents(cardElement.firstElementChild);
-            }
-        });
-    }
-    
-    updateFavorites(favorites) {
-        this.favorites = favorites;
-        this.render();
     }
 }
