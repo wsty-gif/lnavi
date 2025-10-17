@@ -124,4 +124,27 @@ class SearchResults {
             lucide.createIcons();
         }
     }
+
+    // app.jsから呼び出されるメインメソッド
+    setAccounts(accounts) {
+        this.accounts = accounts;
+        this.isEmpty = accounts.length === 0;
+        this.isLoading = false;
+        this.render();
+        this.bindEvents();
+    }
+
+    // 検索結果をクリア
+    clear() {
+        this.accounts = [];
+        this.isEmpty = false;
+        this.isLoading = false;
+        this.container.innerHTML = '';
+    }
+
+    // お気に入りボタンの状態を更新
+    updateFavoriteButton(accountId) {
+        // お気に入り状態に応じてボタンの表示を更新
+    }
+
 }
