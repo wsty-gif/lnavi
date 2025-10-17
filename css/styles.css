@@ -187,3 +187,20 @@
     display: table;
     clear: both;
 }
+
+/* LINE友だち追加ボタンのサイズ調整 */
+.line-add-btn {
+    height: 36px;
+    width: auto;
+    max-width: 160px;
+    display: inline-block;
+    transition: opacity 0.2s ease;
+}
+
+.line-add-btn:hover {
+    opacity: 0.9;
+}
+
+#line_add {
+    height: 50px;
+}

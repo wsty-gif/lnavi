@@ -61,7 +61,7 @@ class SearchResults {
         const isFavorite = favorites.includes(account.id);
         
         return `
-            <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in" data-account-id="${account.id}">
+            <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in flex flex-col" data-account-id="${account.id}">
                 <div class="relative">
                     <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
                     <button class="favorite-btn absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors" data-account-id="${account.id}">
@@ -71,7 +71,7 @@ class SearchResults {
                         }
                     </button>
                 </div>
-                <div class="p-4 account-card-content">
+                <div class="p-4 flex flex-col flex-grow">
                     <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
                     <div class="flex flex-wrap gap-2 mb-3">
                         <span class="badge-${account.service_category_main} px-3 py-1 rounded-full text-sm font-medium">
@@ -85,9 +85,15 @@ class SearchResults {
                     </div>
                     <p class="text-gray-600 text-sm mb-3 line-clamp-2">${account.description}</p>
                     <div class="mt-auto">
-                        <div class="flex items-center text-orange-600 font-medium">
+                        <div class="flex items-center text-orange-600 font-medium mb-3">
                             <i data-lucide="gift" class="w-4 h-4 mr-1"></i>
                             <span class="text-sm">${account.line_benefits}</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="https://lin.ee/${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
+                                <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
+                                     alt="友だち追加" class="line-add-btn">
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -100,8 +106,7 @@ class SearchResults {
         const cards = this.container.querySelectorAll('.account-card');
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // お気に入りボタンのクリックは除外
-                if (e.target.closest('.favorite-btn')) {
+                if (e.target.closest('.favorite-btn') || e.target.closest('a')) {
                     return;
                 }
                 const accountId = card.dataset.accountId;
@@ -125,7 +130,6 @@ class SearchResults {
         }
     }
 
-    // app.jsから呼び出されるメインメソッド
     setAccounts(accounts) {
         this.accounts = accounts;
         this.isEmpty = accounts.length === 0;
@@ -134,7 +138,6 @@ class SearchResults {
         this.bindEvents();
     }
 
-    // 検索結果をクリア
     clear() {
         this.accounts = [];
         this.isEmpty = false;
@@ -142,9 +145,7 @@ class SearchResults {
         this.container.innerHTML = '';
     }
 
-    // お気に入りボタンの状態を更新
     updateFavoriteButton(accountId) {
-        // お気に入り状態に応じてボタンの表示を更新
+        // お気に入り状態の更新処理（必要なら追加）
     }
-
 }
