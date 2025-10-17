@@ -1,4 +1,4 @@
-const SPREADSHEET_CSV_URL = "https://script.google.com/macros/s/AKfycbxK_jnq2vtVJG9DRPtrpMJyT3Cgv8t71HfcYRmSaxTB89HTGuAlu_rjpBUl0qTAAN_M/exec";
+const SPREADSHEET_JSON_URL = "https://script.google.com/macros/s/AKfycby15NdqO6Neav2bV3KgFifdvs-_zMkWIPPofKgBeGj_rLG2djnj-8txvc78-NHw2IsX/exec";
 
 const PREFECTURES = [
   "全て",
@@ -47,28 +47,15 @@ const DataService = {
 
     // CSV読み込み関数
     async loadAccounts() {
-        if (this._accountsCache.length > 0) return this._accountsCache; // キャッシュがあれば返す
-
-        const response = await fetch(SPREADSHEET_CSV_URL);
-        const csvText = await response.text();
-
-        // PapaParseでCSVをJSONに変換
-        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-        this._accountsCache = parsed.data.map(row => ({
-            ...row,
-            gallery_images: row.gallery_images ? JSON.parse(row.gallery_images) : [],
-            line_features: row.line_features ? JSON.parse(row.line_features) : [],
-            tags: row.tags ? JSON.parse(row.tags) : [],
-            can_reserve_online: row.can_reserve_online === "true",
-            has_coupon: row.has_coupon === "true",
-            can_view_menu: row.can_view_menu === "true",
-            can_wait_online: row.can_wait_online === "true",
-            can_contact_online: row.can_contact_online === "true",
-            has_points: row.has_points === "true",
-            is_recommended: row.is_recommended === "true",
-            is_verified: row.is_verified === "true"
-        }));
-        return this._accountsCache;
+        try {
+        const res = await fetch(SPREADSHEET_JSON_URL, { mode: "cors" });
+        const json = await res.json();
+        console.log("✅ JSON取得成功", json.rows);
+        return json.rows;
+        } catch (e) {
+        console.error("❌ JSON取得失敗", e);
+        return [];
+        }
     },
 
     // 全アカウント取得
