@@ -226,10 +226,11 @@ class Detail {
                         <div class="space-y-6">
                             <div class="bg-white rounded-lg shadow-md sticky top-4">
                                 <div class="p-6 space-y-4">
-                                    <button class="line-add-btn w-full bg-green-500 hover:bg-green-600 text-white font-medium py-6 text-lg rounded-lg transition-all">
-                                        友だち追加
-                                    </button>
-
+                                    <a href="https://line.me/R/ti/p/@${this.account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block w-full">
+                                        <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+                                            alt="友だち追加"
+                                            class="line-add-btn w-full rounded-lg overflow-hidden">
+                                    </a>
                                     ${this.account.line_benefits ? `
                                         <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
                                             <div class="flex items-start gap-3">
@@ -329,7 +330,7 @@ class Detail {
         const lineAddBtn = this.container.querySelector('.line-add-btn');
         if (lineAddBtn) {
             lineAddBtn.addEventListener('click', () => {
-                window.open(`https://line.me/R/ti/p/${this.account.line_id}`, '_blank');
+                window.open(`https://line.me/R/ti/p/@${this.account.line_id}`, '_blank');
             });
         }
     }

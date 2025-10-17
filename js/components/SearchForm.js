@@ -48,16 +48,17 @@ class SearchForm {
 
                         <!-- 主要都市クイックアクセス -->
                         <div class="bg-gradient-to-r from-orange-100 to-yellow-100 p-4 rounded-xl">
-                            <p class="text-sm font-bold text-gray-700 mb-3 text-center">主要都市から探す</p>
+                            <p class="text-sm font-bold text-gray-700 mb-3 text-center">カテゴリーから探す</p>
                             <div class="flex flex-wrap justify-center gap-2">
-                                ${MAJOR_CITIES.map(city => `
-                                    <button class="major-city-btn bg-white hover:bg-orange-500 hover:text-white border-2 border-orange-300 font-bold transition-all px-4 py-2 rounded-lg" 
-                                            data-prefecture="${city.prefecture}">
-                                        ${city.name}
+                                ${MAIN_CATEGORIES.filter(cat => cat !== "全て").map(category => `
+                                    <button class="category-btn bg-white hover:bg-orange-500 hover:text-white border-2 border-orange-300 font-bold transition-all px-4 py-2 rounded-lg" 
+                                            data-category="${category}">
+                                        ${category}
                                     </button>
                                 `).join('')}
                             </div>
                         </div>
+
 
                         <!-- 地域とサービスを左右に分割 -->
                         <div class="grid md:grid-cols-2 gap-6">
@@ -125,10 +126,13 @@ class SearchForm {
                         </div>
 
                         <!-- フィルター展開ボタン -->
-                        <button id="toggle-filters" class="w-full border-2 border-gray-300 hover:bg-gray-50 font-bold h-12 bg-white rounded-lg">
-                            <i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2"></i>
+                        <button id="toggle-filters" 
+                                class="w-full border-2 border-gray-300 hover:bg-gray-50 font-bold h-12 bg-white rounded-lg
+                                    flex items-center justify-center gap-2">
+                            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
                             ${this.showFilters ? 'こだわり条件を閉じる' : 'こだわり条件で絞り込む'}
                         </button>
+
 
                         <!-- こだわり条件 -->
                         <div id="filters-content" class="${this.showFilters ? '' : 'hidden'} bg-orange-50 p-4 rounded-lg space-y-3 border-2 border-orange-200">
@@ -166,10 +170,14 @@ class SearchForm {
                         </div>
 
                         <!-- 検索ボタン -->
-                        <button id="search-btn" class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-black py-7 text-xl shadow-xl rounded-xl transition-all transform hover:scale-105">
-                            <i data-lucide="search" class="w-6 h-6 mr-2"></i>
-                            この条件で検索する
+                        <button id="search-btn" 
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 
+                                text-white font-black py-7 text-xl shadow-xl rounded-xl transition-all transform hover:scale-105
+                                flex items-center justify-center gap-2">
+                            <i data-lucide="search" class="w-6 h-6"></i>
+                            <span>この条件で検索する</span>
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -182,11 +190,30 @@ class SearchForm {
     }
     
     bindEvents() {
+        // カテゴリボタンを押したら選択 + 検索 + スクロール
+        this.container.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.dataset.category;
+                this.filters.category_main = category;
+                this.filters.category_detail = "全て"; // 詳細はリセット
+                this.render(); // ボタン押下後UIを更新
+                this.bindEvents(); // 再バインド
+                this.onSearch(this.filters); // 検索実行
+
+                // 検索結果欄までスクロール
+                const resultsSection = document.getElementById('search-results');
+                if (resultsSection) {
+                    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+});
+
+
         // 主要都市ボタン
         this.container.querySelectorAll('.major-city-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const prefecture = e.target.dataset.prefecture;
-                this.handlePrefectureChange(prefecture);
+                this.handlePrefectureChange(prefecture, true); // 第二引数で検索フラグ
             });
         });
         
@@ -260,13 +287,18 @@ class SearchForm {
         });
     }
     
-    handlePrefectureChange(value) {
+    handlePrefectureChange(value, doSearch = false) {
         this.filters.prefecture = value;
         this.filters.city = "全て";
         this.filters.area = "全て";
         this.render();
         this.bindEvents();
+
+        if (doSearch) {
+            this.onSearch(this.filters); // 都道府県変更と同時に検索
+        }
     }
+
     
     handleCityChange(value) {
         this.filters.city = value;

@@ -2,9 +2,9 @@
 const MOCK_ACCOUNTS = [
     {
         id: "1",
-        account_name: "東京ラーメン横丁",
-        line_id: "tokyo-ramen",
-        description: "新宿にある老舗ラーメン店です。特製醤油ラーメンが自慢の一品。LINE友だち追加で初回100円引きクーポンをプレゼント！",
+        account_name: "レヴィア",
+        line_id: "542rhfjm",
+        description: "京都伏見にあるパーソナルジムです。ダイエットしたい方向けにピッタリ。LINE友だち追加で初回無料クーポンをプレゼント！",
         image_url: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop",
         gallery_images: [
             "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop",

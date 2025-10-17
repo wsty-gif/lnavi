@@ -204,4 +204,6 @@ LINE友だち追加ボタンのサイズ調整
 #line_add {
     height: 50px;
     opacity: 0.9;
+    border-radius: 8px; /* ← 角を丸める */
+    overflow: hidden;   /* はみ出し防止（念のため） */
 }

@@ -155,7 +155,7 @@ class AccountCard {
         if (lineAddBtn) {
             lineAddBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                window.open(`https://line.me/R/ti/p/${this.account.line_id}`, '_blank');
+                window.open(`https://line.me/R/ti/p/@${this.account.line_id}`, '_blank');
             });
         }
         

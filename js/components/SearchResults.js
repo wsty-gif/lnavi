@@ -90,7 +90,7 @@ class SearchResults {
                             <span class="text-sm">${account.line_benefits}</span>
                         </div>
                         <div class="text-center">
-                            <a href="https://lin.ee/${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
+                            <a href="https://line.me/R/ti/p/@${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
                                 <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
                                      alt="友だち追加" class="line-add-btn">
                             </a>
