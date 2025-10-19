@@ -109,7 +109,7 @@ class SearchResults {
                 if (e.target.closest('.favorite-btn') || e.target.closest('a')) {
                     return;
                 }
-                const accountId = card.dataset.accountId;
+                const accountId = parseInt(card.dataset.accountId);
                 this.onAccountClick(accountId);
             });
         });
@@ -119,7 +119,7 @@ class SearchResults {
         favoriteBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const accountId = btn.dataset.accountId;
+                const accountId = parseInt(btn.dataset.accountId);
                 this.onToggleFavorite(accountId);
             });
         });

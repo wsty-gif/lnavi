@@ -12,7 +12,6 @@ const PREFECTURES = [
   "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
 ];
 
-// カテゴリ定数
 const MAIN_CATEGORIES = [
     "全て",
     "飲食",
@@ -27,7 +26,6 @@ const MAIN_CATEGORIES = [
     "その他"
 ];
 
-// 詳細カテゴリ
 const DETAIL_CATEGORIES = {
     "飲食": ["ラーメン", "寿司", "焼肉", "イタリアン", "フレンチ", "中華料理", "カフェ", "居酒屋", "バー", "ファストフード", "その他飲食"],
     "美容": ["ヘアサロン", "ネイルサロン", "エステサロン", "まつげサロン", "リラクゼーション", "その他美容"],
@@ -41,55 +39,41 @@ const DETAIL_CATEGORIES = {
     "その他": ["その他"]
 };
 
-// データアクセス関数
 const DataService = {
-    _accountsCache: [], // キャッシュ
+    _accountsCache: [],
 
-    // CSV読み込み関数
     async loadAccounts() {
+        if (this._accountsCache.length > 0) return this._accountsCache;
         try {
-        const res = await fetch(SPREADSHEET_JSON_URL, { mode: "cors" });
-        const json = await res.json();
-        console.log("✅ JSON取得成功", json.rows);
-        return json.rows;
+            const res = await fetch(SPREADSHEET_JSON_URL, { mode: "cors" });
+            const json = await res.json();
+            this._accountsCache = json.rows;
+            console.log("✅ JSON取得成功", this._accountsCache);
+            return this._accountsCache;
         } catch (e) {
-        console.error("❌ JSON取得失敗", e);
-        return [];
+            console.error("❌ JSON取得失敗", e);
+            return [];
         }
     },
 
-    // 全アカウント取得
     async getAllAccounts() {
         return await this.loadAccounts();
     },
 
-    // ID指定で取得
     async getAccountById(id) {
         const accounts = await this.loadAccounts();
-        return accounts.find(acc => acc.id === id);
+        return accounts.find(acc => String(acc.id).trim() === String(id).trim());
     },
 
-    // 検索
     async searchAccounts(filters) {
         const accounts = await this.loadAccounts();
         let results = [...accounts];
 
-        // フィルタリング
-        if (filters.prefecture && filters.prefecture !== "全て") {
-            results = results.filter(acc => acc.prefecture === filters.prefecture);
-        }
-        if (filters.city && filters.city !== "全て") {
-            results = results.filter(acc => acc.city === filters.city);
-        }
-        if (filters.area && filters.area !== "全て") {
-            results = results.filter(acc => acc.area === filters.area);
-        }
-        if (filters.category_main && filters.category_main !== "全て") {
-            results = results.filter(acc => acc.service_category_main === filters.category_main);
-        }
-        if (filters.category_detail && filters.category_detail !== "全て") {
-            results = results.filter(acc => acc.service_category_detail === filters.category_detail);
-        }
+        if (filters.prefecture && filters.prefecture !== "全て") results = results.filter(acc => acc.prefecture === filters.prefecture);
+        if (filters.city && filters.city !== "全て") results = results.filter(acc => acc.city === filters.city);
+        if (filters.area && filters.area !== "全て") results = results.filter(acc => acc.area === filters.area);
+        if (filters.category_main && filters.category_main !== "全て") results = results.filter(acc => acc.service_category_main === filters.category_main);
+        if (filters.category_detail && filters.category_detail !== "全て") results = results.filter(acc => acc.service_category_detail === filters.category_detail);
         if (filters.keyword) {
             const keyword = filters.keyword.toLowerCase();
             results = results.filter(acc =>
@@ -98,7 +82,6 @@ const DataService = {
             );
         }
 
-        // こだわり条件
         if (filters.can_reserve_online) results = results.filter(acc => acc.can_reserve_online);
         if (filters.has_coupon) results = results.filter(acc => acc.has_coupon);
         if (filters.can_view_menu) results = results.filter(acc => acc.can_view_menu);

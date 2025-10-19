@@ -58,8 +58,8 @@ class Favorites {
 
                 <!-- コンテンツ -->
                 ${this.isLoading ? `
-                    <div class="grid grid-cols-responsive gap-6">
-                        ${Array(6).fill(0).map((_, i) => `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${Array(6).fill(0).map(() => `
                             <div class="h-96 bg-gray-100 rounded-lg animate-pulse"></div>
                         `).join('')}
                     </div>
@@ -77,17 +77,16 @@ class Favorites {
                         </button>
                     </div>
                 ` : `
-                    <div class="grid grid-cols-responsive gap-6">
-                        ${favoriteAccounts.map((account, index) => `
-                            <div data-account-card="${account.id}">
-                                ${new AccountCard(account, {
-                                    index,
-                                    isFavorite: true,
-                                    onToggleFavorite: this.handleToggleFavorite.bind(this),
-                                    onAccountClick: this.onAccountClick
-                                }).render()}
-                            </div>
-                        `).join('')}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${favoriteAccounts.map((account, index) => {
+                            const card = new AccountCard(account, {
+                                index,
+                                isFavorite: true,
+                                onToggleFavorite: this.handleToggleFavorite.bind(this),
+                                onAccountClick: this.onAccountClick
+                            });
+                            return card.render();
+                        }).join('')}
                     </div>
                 `}
             </div>
@@ -97,7 +96,7 @@ class Favorites {
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
-        
+
         // カードのイベントバインド
         if (!this.isLoading && favoriteAccounts.length > 0) {
             this.bindCardEvents(favoriteAccounts);
@@ -116,7 +115,7 @@ class Favorites {
     
     bindCardEvents(favoriteAccounts) {
         favoriteAccounts.forEach((account, index) => {
-            const cardElement = this.container.querySelector(`[data-account-card="${account.id}"]`);
+            const cardElement = this.container.querySelector(`[data-account-id="${account.id}"]`);
             if (cardElement) {
                 const card = new AccountCard(account, {
                     index,
@@ -124,7 +123,7 @@ class Favorites {
                     onToggleFavorite: this.handleToggleFavorite.bind(this),
                     onAccountClick: this.onAccountClick
                 });
-                card.bindEvents(cardElement.firstElementChild);
+                card.bindEvents(cardElement);
             }
         });
     }

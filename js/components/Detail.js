@@ -121,9 +121,6 @@ class Detail {
                                                     <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
                                                 ` : ''}
                                             </div>
-                                            <p class="text-gray-600 font-mono bg-gray-50 px-3 py-1 rounded inline-block">
-                                                @${this.account.line_id}
-                                            </p>
                                         </div>
                                     </div>
 
