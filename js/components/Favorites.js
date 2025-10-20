@@ -35,8 +35,11 @@ class Favorites {
     }
     
     render() {
-        const favoriteAccounts = this.accounts.filter(account => this.favorites.includes(account.id));
-        
+        // IDを文字列として比較
+        const favoriteAccounts = this.accounts.filter(account =>
+            this.favorites.includes(String(account.id))
+        );
+
         this.container.innerHTML = `
             <div class="space-y-8">
                 <!-- ヘッダー -->
@@ -69,20 +72,15 @@ class Favorites {
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">
                             お気に入りがまだありません
                         </h3>
-                        <p class="text-gray-500 mb-6">
-                            気になるアカウントをお気に入りに追加しましょう
-                        </p>
-                        <button class="back-to-search-btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors">
-                            アカウントを探す
-                        </button>
+                        <p class="text-gray-500">検索結果から♡マークを押すとここに表示されます。</p>
                     </div>
                 ` : `
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${favoriteAccounts.map((account, index) => {
+                        ${favoriteAccounts.map((account, i) => {
                             const card = new AccountCard(account, {
-                                index,
+                                index: i,
                                 isFavorite: true,
-                                onToggleFavorite: this.handleToggleFavorite.bind(this),
+                                onToggleFavorite: this.onToggleFavorite,
                                 onAccountClick: this.onAccountClick
                             });
                             return card.render();
@@ -91,17 +89,10 @@ class Favorites {
                 `}
             </div>
         `;
-        
-        // Lucideアイコンを更新
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
 
-        // カードのイベントバインド
-        if (!this.isLoading && favoriteAccounts.length > 0) {
-            this.bindCardEvents(favoriteAccounts);
-        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
+
     
     bindEvents() {
         // 戻るボタン

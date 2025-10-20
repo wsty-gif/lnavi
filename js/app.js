@@ -135,21 +135,28 @@ class LineAccountSearchApp {
         }
     }
     
-    handleToggleFavorite(accountId) {
-        const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
-        let newFavorites;
-        
-        if (favorites.includes(accountId)) {
-            newFavorites = favorites.filter(id => id !== accountId);
-        } else {
-            newFavorites = [...favorites, accountId];
-        }
-        
-        localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
-        
-        // 検索結果のお気に入り状態を更新
-        this.searchResults.updateFavorites(newFavorites);
+handleToggleFavorite(accountId) {
+    // すべて文字列として統一
+    const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+    const id = String(accountId);
+
+    let newFavorites;
+
+    if (favorites.includes(id)) {
+        // すでにお気に入りに存在 → 削除
+        newFavorites = favorites.filter(favId => favId !== id);
+    } else {
+        // 未登録 → 追加
+        newFavorites = [...favorites, id];
     }
+
+    // 保存
+    localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
+
+    // 表示更新（赤⇔白切替）
+    this.searchResults.updateFavorites(newFavorites);
+}
+
     
     handleAccountClick(accountId) {
         this.showDetail(accountId);
