@@ -136,26 +136,32 @@ class LineAccountSearchApp {
     }
     
 handleToggleFavorite(accountId) {
-    // すべて文字列として統一
-    const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
-    const id = String(accountId);
-
+    // LocalStorageから現状のお気に入り一覧を取得
+    const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
     let newFavorites;
 
-    if (favorites.includes(id)) {
-        // すでにお気に入りに存在 → 削除
-        newFavorites = favorites.filter(favId => favId !== id);
+    // クリックされたIDが存在するか確認
+    if (favorites.includes(String(accountId))) {
+        // → すでにお気に入り → 削除
+        newFavorites = favorites.filter(id => id !== String(accountId));
     } else {
-        // 未登録 → 追加
-        newFavorites = [...favorites, id];
+        // → 非お気に入り → 追加
+        newFavorites = [...favorites, String(accountId)];
     }
 
-    // 保存
+    // LocalStorageに保存
     localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
 
-    // 表示更新（赤⇔白切替）
+    // 検索結果のお気に入り状態を即時反映
     this.searchResults.updateFavorites(newFavorites);
+
+    // お気に入りページを開いている場合も即更新
+    if (this.currentPage === 'favorites') {
+        this.favorites.loadFavorites();
+        this.favorites.render();
+    }
 }
+
 
     
     handleAccountClick(accountId) {

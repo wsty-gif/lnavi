@@ -63,11 +63,12 @@ class SearchResults {
             <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in flex flex-col" data-account-id="${account.id}">
                 <div class="relative">
                     <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
-                    <button class="favorite-btn absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors" data-account-id="${account.id}" aria-label="お気に入り">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="${isFavorite ? 'red' : 'none'}" stroke="${isFavorite ? 'red' : 'gray'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                    </button>
+<button class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg 
+    ${isFavorite ? 'bg-red-500 text-white scale-110' : 'bg-white/90 text-gray-600 hover:bg-white hover:scale-110'}" 
+    data-account-id="${account.id}">
+    <i data-lucide="heart" class="w-5 h-5 ${isFavorite ? 'fill-current' : ''}"></i>
+</button>
+
                 </div>
                 <div class="p-4 flex flex-col flex-grow">
                     <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>

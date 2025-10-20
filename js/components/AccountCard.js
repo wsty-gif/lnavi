@@ -21,10 +21,14 @@ class AccountCard {
                 ${this.account.image_url ? `
                     <div class="relative w-full h-48 overflow-hidden bg-gray-100">
                         <img src="${this.account.image_url}" 
-                             alt="${this.account.account_name}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\"flex items-center justify-center h-full bg-gradient-to-br from-orange-100 to-yellow-100\\"><div class=\\"text-6xl\\">🏪</div></div>';">
-                        
+                            alt="${this.account.account_name}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onerror="this.style.display='none'; 
+                                    const fallback = document.createElement('div');
+                                    fallback.className='flex items-center justify-center h-full bg-gradient-to-br from-orange-100 to-yellow-100';
+                                    fallback.innerHTML='<div class=&quot;text-6xl&quot;>🏪</div>';
+                                    this.parentElement.appendChild(fallback);">
+
                         ${this.account.is_recommended ? `
                             <div class="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-full shadow-lg font-black text-xs animate-pulse">
                                 ⭐ 今月のイチ押し！
