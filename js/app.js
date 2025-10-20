@@ -135,32 +135,42 @@ class LineAccountSearchApp {
         }
     }
     
-handleToggleFavorite(accountId) {
-    // LocalStorageから現状のお気に入り一覧を取得
-    const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
-    let newFavorites;
+handleToggleFavorite(accountId, source = "search") {
+    const id = String(accountId);
 
-    // クリックされたIDが存在するか確認
-    if (favorites.includes(String(accountId))) {
-        // → すでにお気に入り → 削除
-        newFavorites = favorites.filter(id => id !== String(accountId));
-    } else {
-        // → 非お気に入り → 追加
-        newFavorites = [...favorites, String(accountId)];
+    // ✅ LocalStorageの最新状態を取得
+    let stored = [];
+    try {
+        stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+    } catch {
+        stored = [];
     }
 
-    // LocalStorageに保存
-    localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
+    const isFavorite = stored.includes(id);
 
-    // 検索結果のお気に入り状態を即時反映
-    this.searchResults.updateFavorites(newFavorites);
+    // ✅ 検索画面からの操作時のみLocalStorageを更新
+    if (source === "search") {
+        const updated = isFavorite
+            ? stored.filter(fav => fav !== id)
+            : Array.from(new Set([...stored, id]));
 
-    // お気に入りページを開いている場合も即更新
-    if (this.currentPage === 'favorites') {
-        this.favorites.loadFavorites();
+        localStorage.setItem('line_account_favorites', JSON.stringify(updated));
+    }
+
+    // ✅ 検索結果のUIに反映
+    if (this.searchResults && typeof this.searchResults.applyFavoriteState === 'function') {
+        this.searchResults.applyFavoriteState(id, !isFavorite);
+    }
+
+    // ✅ お気に入りページが開いていたらLocalStorageの最新状態を再反映
+    if (this.currentPage === 'favorites' && this.favorites) {
+        const refreshed = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+        this.favorites.favorites = refreshed;
         this.favorites.render();
     }
 }
+
+
 
 
     

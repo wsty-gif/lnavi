@@ -63,12 +63,13 @@ class SearchResults {
             <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in flex flex-col" data-account-id="${account.id}">
                 <div class="relative">
                     <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
-<button class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg 
-    ${isFavorite ? 'bg-red-500 text-white scale-110' : 'bg-white/90 text-gray-600 hover:bg-white hover:scale-110'}" 
-    data-account-id="${account.id}">
-    <i data-lucide="heart" class="w-5 h-5 ${isFavorite ? 'fill-current' : ''}"></i>
-</button>
-
+                        <button 
+                        class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg bg-white/90 text-gray-600 hover:bg-white hover:scale-110" 
+                        data-account-id="${account.id}">
+                        <i data-lucide="heart" 
+                            class="w-5 h-5 transition-colors ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-400'}">
+                        </i>
+                        </button>
                 </div>
                 <div class="p-4 flex flex-col flex-grow">
                     <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
@@ -107,33 +108,45 @@ class SearchResults {
             });
         });
 
+        // const favoriteBtns = this.container.querySelectorAll('.favorite-btn');
+        // favoriteBtns.forEach(btn => {
+        //     btn.addEventListener('click', (e) => {
+        //         e.stopPropagation();
+        //         const accountId = parseInt(btn.dataset.accountId);
+        //         const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
+        //         const isFav = favorites.includes(accountId);
+
+        //         // トグル
+        //         let newFavorites;
+        //         if (isFav) {
+        //             newFavorites = favorites.filter(id => id !== accountId);
+        //         } else {
+        //             newFavorites = [...favorites, accountId];
+        //         }
+        //         localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
+
+        //         // SVGカラー切り替え
+        //         const svg = btn.querySelector('svg');
+        //         if (svg) {
+        //             svg.setAttribute('fill', isFav ? 'none' : 'red');
+        //             svg.setAttribute('stroke', isFav ? 'gray' : 'red');
+        //         }
+
+        //         this.onToggleFavorite(accountId);
+        //     });
+        // });
+        // お気に入りボタンのクリックイベント
+        // お気に入りボタンのクリックイベント
         const favoriteBtns = this.container.querySelectorAll('.favorite-btn');
         favoriteBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const accountId = parseInt(btn.dataset.accountId);
-                const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
-                const isFav = favorites.includes(accountId);
-
-                // トグル
-                let newFavorites;
-                if (isFav) {
-                    newFavorites = favorites.filter(id => id !== accountId);
-                } else {
-                    newFavorites = [...favorites, accountId];
-                }
-                localStorage.setItem('line_account_favorites', JSON.stringify(newFavorites));
-
-                // SVGカラー切り替え
-                const svg = btn.querySelector('svg');
-                if (svg) {
-                    svg.setAttribute('fill', isFav ? 'none' : 'red');
-                    svg.setAttribute('stroke', isFav ? 'gray' : 'red');
-                }
-
-                this.onToggleFavorite(accountId);
+                const accountId = String(btn.dataset.accountId); // 文字列に統一
+                this.onToggleFavorite(accountId, "search");
             });
         });
+
+
     }
 
     setAccounts(accounts) {
@@ -151,19 +164,48 @@ class SearchResults {
         this.container.innerHTML = '';
     }
 
-updateFavorites(favorites) {
-    // ローカルストレージ更新済みの favorites 配列が渡ってくる前提
-    const favoriteBtns = this.container.querySelectorAll('.favorite-btn');
+    updateFavorites(favorites) {
+        // ローカルストレージ更新済みの favorites 配列が渡ってくる前提
+        const favoriteBtns = this.container.querySelectorAll('.favorite-btn');
 
-    favoriteBtns.forEach(btn => {
-        const accountId = String(btn.dataset.accountId);
-        const isFav = favorites.includes(accountId);
-        const svg = btn.querySelector('svg');
-        if (svg) {
-            svg.setAttribute('fill', isFav ? 'red' : 'none');
-            svg.setAttribute('stroke', isFav ? 'red' : 'gray');
+        favoriteBtns.forEach(btn => {
+            const accountId = String(btn.dataset.accountId);
+            const isFav = favorites.includes(accountId);
+            const svg = btn.querySelector('svg');
+            if (svg) {
+                svg.setAttribute('fill', isFav ? 'red' : 'none');
+                svg.setAttribute('stroke', isFav ? 'red' : 'gray');
+            }
+        });
+    }
+
+    // クリック後に見た目だけ切り替える（i→svg 変換後でも確実に動作）
+    applyFavoriteState(accountId, isFavorite) {
+        const btn = this.container.querySelector(`.favorite-btn[data-account-id="${accountId}"]`);
+        if (!btn) return;
+
+        // Lucide は <i> を <svg> に置き換えるので両方を拾う
+        const icon =
+            btn.querySelector('svg[data-lucide="heart"]') ||
+            btn.querySelector('svg.lucide-heart') ||
+            btn.querySelector('i[data-lucide="heart"]');
+
+        if (!icon) return;
+
+        // 見た目のクラスを統一的に更新（色は class、塗りつぶしは属性で制御）
+        if (isFavorite) {
+            icon.classList.add('text-red-500');
+            icon.classList.remove('text-gray-400');
+            // Lucide の heart はデフォルト fill="none" なので、塗りつぶしを有効化
+            icon.setAttribute('fill', 'currentColor');
+            icon.setAttribute('stroke', 'currentColor');
+            icon.classList.add('fill-current'); // 互換維持（i のままでも効く）
+        } else {
+            icon.classList.remove('text-red-500', 'fill-current');
+            icon.classList.add('text-gray-400');
+            icon.setAttribute('fill', 'none');
+            icon.setAttribute('stroke', 'currentColor');
         }
-    });
-}
+    }
 
 }

@@ -35,14 +35,17 @@ class AccountCard {
                             </div>
                         ` : ''}
 
-                        <button class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg ${
-                            this.isFavorite ? 'bg-red-500 text-white scale-110' : 'bg-white/90 text-gray-600 hover:bg-white hover:scale-110'
-                        }" data-account-id="${this.account.id}">
-                            <i data-lucide="heart" class="w-5 h-5 ${this.isFavorite ? 'fill-current' : ''}"></i>
+                        <!-- ✅ 修正版：背景固定・ハートだけ色変化 -->
+                        <button class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg bg-white/90 hover:scale-110" data-account-id="${this.account.id}">
+                        ${this.isFavorite
+                            ? '<i data-lucide="heart" class="w-5 h-5 text-red-500 fill-current"></i>'
+                            : '<i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>'
+                        }
                         </button>
+
                     </div>
                 ` : ''}
-                
+
                 <div class="p-4 space-y-3">
                     <!-- 店舗名 -->
                     <div class="flex items-center gap-2">
@@ -117,7 +120,6 @@ class AccountCard {
     
     getCategoryClass(category) {
         const categoryColors = {
-            // 大分類の色
             "飲食": "badge-飲食",
             "美容": "badge-美容",
             "小売": "badge-小売",
@@ -128,7 +130,6 @@ class AccountCard {
             "エンタメ": "badge-エンタメ",
             "自治体・公共": "badge-自治体・公共",
             "その他": "badge-その他",
-            // 詳細分類の色
             "ラーメン": "badge-ラーメン",
             "寿司": "badge-寿司",
             "焼肉": "badge-焼肉",
@@ -140,7 +141,6 @@ class AccountCard {
             "バー": "badge-バー",
             "ファストフード": "badge-ファストフード"
         };
-        
         return categoryColors[category] || "badge-その他";
     }
     
@@ -153,7 +153,7 @@ class AccountCard {
                 this.onToggleFavorite(this.account.id);
             });
         }
-        
+
         // LINE追加ボタン
         const lineAddBtn = element.querySelector('.line-add-btn');
         if (lineAddBtn) {
@@ -162,7 +162,7 @@ class AccountCard {
                 window.open(`https://line.me/R/ti/p/@${this.account.line_id}`, '_blank');
             });
         }
-        
+
         // カード全体のクリック
         element.addEventListener('click', () => {
             this.onAccountClick(this.account.id);
