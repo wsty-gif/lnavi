@@ -211,3 +211,73 @@ LINE友だち追加ボタンのサイズ調整
 .no-wrap {
   white-space: nowrap;
 }
+
+/* ---------------------------
+   🔧 検索フォーム横並び用カスタムCSS
+---------------------------- */
+
+/* 親コンテナ（flex-wrapを有効にして2列並び） */
+#search-form .search-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px; /* 各項目の間隔 */
+}
+
+/* 各セレクトボックスを2個ずつ横並びに配置 */
+#search-form .search-grid > div {
+  width: 48%;
+}
+
+/* モバイルでも横並び維持（狭すぎるときは自動縦並び） */
+@media (max-width: 400px) {
+  #search-form .search-grid > div {
+    width: 100%;
+  }
+}
+
+/* ラベルの見た目を調整 */
+#search-form label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+/* セレクトボックスの統一スタイル */
+#search-form select {
+  width: 100%;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  height: 44px;
+  padding: 0 10px;
+  font-size: 0.95rem;
+}
+
+/* 検索ボタンの位置とサイズ調整 */
+#search-form #search-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* 🌐 モバイルで横スクロールが発生しないように制御 */
+html,
+body {
+  overflow-x: hidden !important;
+  width: 100%;
+}
+
+/* Hero テキストがはみ出さないように調整 */
+.hero-title {
+  white-space: nowrap; /* 改行を防ぐ */
+  font-size: clamp(1rem, 5vw, 2rem); /* スマホ時に自動縮小 */
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* hero 全体の安全な横幅制御 */
+.hero-container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}

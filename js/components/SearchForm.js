@@ -61,7 +61,7 @@ class SearchForm {
 
 
                         <!-- 地域とサービスを左右に分割 -->
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="search-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-end">
                             <!-- 左半分：地域選択 -->
                             <div class="space-y-4">
                                 <div class="space-y-2">
