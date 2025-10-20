@@ -74,11 +74,11 @@ class SearchResults {
                 <div class="p-4 flex flex-col flex-grow">
                     <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
                     <div class="flex flex-wrap gap-2 mb-3">
-                        <span class="badge-${account.service_category_main} px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="category-badge badge-${account.service_category_main} px-3 py-1 rounded-full text-sm font-medium">
                             ${account.service_category_main}
                         </span>
                         ${account.service_category_detail ? `
-                            <span class="badge-${account.service_category_detail} px-3 py-1 rounded-full text-sm font-medium">
+                            <span class="category-badge badge-${account.service_category_detail} px-3 py-1 rounded-full text-sm font-medium">
                                 ${account.service_category_detail}
                             </span>` : ''}
                     </div>

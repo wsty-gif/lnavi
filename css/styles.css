@@ -1,283 +1,520 @@
-/* カスタムスタイル */
+/* =============================
+   🌿 ベーススタイル
+============================= */
 .nav-btn.active {
-    background-color: #10b981;
-    color: white;
+  background-color: #10b981;
+  color: white;
 }
-
 .nav-btn:hover {
-    background-color: #f3f4f6;
+  background-color: #f3f4f6;
 }
-
 .nav-btn.active:hover {
-    background-color: #059669;
+  background-color: #059669;
 }
 
-/* カードホバーエフェクト */
+/* カード */
 .account-card {
-    transition: all 0.3s ease;
-    transform: translateY(0);
-    height: 100%; /* カードの高さを統一 */
-    display: flex;
-    flex-direction: column;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
-
 .account-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* アニメーション */
-.fade-in {
-    animation: fadeIn 0.5s ease-in;
-}
-
+.fade-in { animation: fadeIn 0.5s ease-in; }
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* セレクトボックスのスタイル */
+/* セレクト */
 .custom-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
-
-/* チェックボックスのスタイル */
-.custom-checkbox {
-    accent-color: #ea580c;
-}
+.custom-checkbox { accent-color: #ea580c; }
 
 /* スクロールバー */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* 画像の遅延読み込み */
-.lazy-image {
-    transition: opacity 0.3s;
-    opacity: 0;
-}
-
-.lazy-image.loaded {
-    opacity: 1;
-}
-
-/* モーダルアニメーション */
-.modal-enter {
-    animation: modalEnter 0.3s ease-out;
-}
-
+/* モーダル */
+.modal-enter { animation: modalEnter 0.3s ease-out; }
 @keyframes modalEnter {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* 検索結果コンテナの固定 */
-#search-results {
-    width: 100%;
-    clear: both;
-}
+/* =============================
+   🔍 検索フォーム
+============================= */
+#search-form { margin-bottom: 2rem; }
 
-/* グリッドレイアウトの改善 */
-.grid-cols-responsive {
-    display: grid;
-    gap: 1.5rem;
-    width: 100%;
-}
-
-/* レスポンシブ */
-@media (max-width: 768px) {
-    .grid-cols-responsive {
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        gap: 1rem;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-    .grid-cols-responsive {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.25rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .grid-cols-responsive {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.5rem;
-    }
-}
-
-/* カードの画像コンテナ */
-.account-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-/* カードコンテンツの調整 */
-.account-card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* バッジの色（Tailwind置き換え済み） */
-.badge-飲食 { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-.badge-美容 { background-color: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
-.badge-小売 { background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-.badge-医療・健康 { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-.badge-教育 { background-color: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
-.badge-不動産 { background-color: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
-.badge-士業・コンサル { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
-.badge-エンタメ { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-.badge-自治体・公共 { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-.badge-その他 { background-color: #f1f5f9; color: #1e293b; border: 1px solid #e2e8f0; }
-
-/* 詳細カテゴリバッジ */
-.badge-ラーメン { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-.badge-寿司 { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-.badge-焼肉 { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-.badge-イタリアン { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-.badge-フレンチ { background-color: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
-.badge-中華料理 { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-.badge-カフェ { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-.badge-居酒屋 { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-.badge-バー { background-color: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
-.badge-ファストフード { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-/* 検索フォームの調整 */
-#search-form {
-    margin-bottom: 2rem;
-}
-
-/* コンテナのクリアフィックス */
-.clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-LINE友だち追加ボタンのサイズ調整
-.line-add-btn {
-    height: 36px;
-    width: auto;
-    max-width: 160px;
-    display: inline-block;
-    transition: opacity 0.2s ease;
-}
-
-.line-add-btn:hover {
-    opacity: 0.9;
-}
-
-#line_add {
-    height: 50px;
-    opacity: 0.9;
-    border-radius: 8px; /* ← 角を丸める */
-    overflow: hidden;   /* はみ出し防止（念のため） */
-}
-
-.no-wrap {
-  white-space: nowrap;
-}
-
-/* ---------------------------
-   🔧 検索フォーム横並び用カスタムCSS
----------------------------- */
-
-/* 親コンテナ（flex-wrapを有効にして2列並び） */
 #search-form .search-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px; /* 各項目の間隔 */
+  gap: 10px;
+}
+#search-form .search-grid > div { width: 48%; }
+
+@media (max-width: 360px) {
+  #search-form .search-grid > div { width: 100%; }
 }
 
-/* 各セレクトボックスを2個ずつ横並びに配置 */
-#search-form .search-grid > div {
-  width: 48%;
-}
-
-/* モバイルでも横並び維持（狭すぎるときは自動縦並び） */
-@media (max-width: 400px) {
-  #search-form .search-grid > div {
-    width: 100%;
-  }
-}
-
-/* ラベルの見た目を調整 */
-#search-form label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #374151;
-  margin-bottom: 4px;
-}
-
-/* セレクトボックスの統一スタイル */
-#search-form select {
+#search-form select,
+#search-form input {
   width: 100%;
-  border: 1.5px solid #d1d5db;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   height: 44px;
   padding: 0 10px;
   font-size: 0.95rem;
 }
 
-/* 検索ボタンの位置とサイズ調整 */
 #search-form #search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  height: 42px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background-image: linear-gradient(to right, var(--tw-gradient-from, #f97316), var(--tw-gradient-to, #ef4444));
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
   margin-top: 10px;
 }
+#search-form #search-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+@media (max-width: 480px) {
+  #search-form #search-btn { height: 38px; font-size: 0.9rem; border-radius: 8px; }
+}
 
-/* 🌐 モバイルで横スクロールが発生しないように制御 */
-html,
-body {
+/* =============================
+   🧡 こだわり条件（安定版）
+============================= */
+#search-form .filter-section {
+  display: flex;
+  flex-direction: column; /* ← 縦並び固定 */
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#search-form .filter-section label {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: #374151;
+  white-space: normal;
+  word-break: break-word;
+}
+
+#search-form .filter-section input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  accent-color: #f97316;
+}
+
+@media (max-width: 480px) {
+  #search-form .filter-section { gap: 4px; }
+  #search-form .filter-section label { font-size: 0.9rem; }
+}
+
+/* =============================
+   🪄 その他補正
+============================= */
+html, body {
   overflow-x: hidden !important;
   width: 100%;
 }
 
-/* Hero テキストがはみ出さないように調整 */
 .hero-title {
-  white-space: nowrap; /* 改行を防ぐ */
-  font-size: clamp(1rem, 5vw, 2rem); /* スマホ時に自動縮小 */
+  display: block;
   text-align: center;
+  color: #111827;
+  font-weight: 800;
+  font-size: clamp(1rem, 4vw, 1.8rem);
+  margin: 0 auto;
+  max-width: 95vw;
+  white-space: normal;
   word-break: keep-all;
 }
 
-/* hero 全体の安全な横幅制御 */
 .hero-container {
   max-width: 100vw;
   overflow-x: hidden;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+/* ============================
+   💚 こだわり条件専用スタイル
+   （都道府県などのselectとは完全分離）
+============================ */
+
+/* コンテナ設定 */
+#search-form .filter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+/* ラベル設定 */
+#search-form .filter-section label {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.4;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ✅ チェックボックス（独立定義） */
+#search-form .filter-section input[type="checkbox"].filter-checkbox {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  accent-color: #f97316; /* orange-500 */
+  flex-shrink: 0;
+  transform: scale(0.9); /* やや小さめ */
+  cursor: pointer;
+}
+
+/* モバイル時 */
+@media (max-width: 480px) {
+  #search-form .filter-section label {
+    font-size: 0.85rem;
+  }
+  #search-form .filter-section input[type="checkbox"].filter-checkbox {
+    width: 14px;
+    height: 14px;
+    transform: scale(0.85);
+  }
+}
+
+/* ============================
+   💚 こだわり条件専用レイアウト修正
+   （1列整列＆バランス調整）
+============================ */
+
+/* こだわり条件コンテナ */
+#search-form #filters-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 各行を横並びにし、折り返さない */
+#search-form #filters-content > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* チェックボックス */
+#search-form #filters-content input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #f97316; /* orange-500 */
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* テキストラベル */
+#search-form #filters-content label {
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+/* モバイル時の微調整 */
+@media (max-width: 480px) {
+  #search-form #filters-content {
+    gap: 6px;
+  }
+  #search-form #filters-content input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+  #search-form #filters-content label {
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================
+   💚 こだわり条件＋ボタンの整列修正
+============================ */
+
+/* こだわり条件セクション全体を縦並びに固定 */
+#search-form .filter-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* こだわり条件のチェック群 */
+#search-form #filters-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+/* 各チェックボックス行 */
+#search-form #filters-content > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* チェックボックス */
+#search-form #filters-content input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #f97316;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* ラベル */
+#search-form #filters-content label {
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.4;
+}
+
+/* 絞り込みボタンの配置（条件の下に固定） */
+#search-form .filter-submit {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* ボタンのスタイル統一 */
+#search-form .filter-submit button {
+  background-image: linear-gradient(to right, #f97316, #ef4444);
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+#search-form .filter-submit button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+/* モバイル対応 */
+@media (max-width: 480px) {
+  #search-form .filter-submit button {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+  }
+}
+
+/* ============================
+   💚 こだわり条件（SearchForm構造維持・表示安定版）
+============================ */
+
+/* こだわり条件コンテナ */
+#search-form #filters-content {
+  display: none; /* デフォルト非表示（JSで切替） */
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff7ed; /* orange-50 */
+  border: 2px solid #fed7aa; /* orange-200 */
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* 表示状態時に出す */
+#search-form #filters-content.active {
+  display: flex;
+}
+
+/* 各行（1行ごとに横並び） */
+#search-form #filters-content .filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+/* チェックボックス */
+#search-form #filters-content input[type="checkbox"].custom-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #f97316;
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ラベル */
+#search-form #filters-content label {
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: normal;
+}
+
+/* 見出し */
+#search-form #filters-content p {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+/* モバイル最適化 */
+@media (max-width: 480px) {
+  #search-form #filters-content {
+    padding: 10px;
+  }
+
+  #search-form #filters-content input[type="checkbox"].custom-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+
+  #search-form #filters-content label {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==============================
+   ✅ こだわり条件の最終安定版
+============================== */
+
+/* デフォルトでは非表示（hidden クラスまたは JSで制御） */
+#search-form #filters-content.hidden {
+  display: none !important;
+}
+
+/* 表示時 */
+#search-form #filters-content {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff7ed; /* orange-50 */
+  border: 2px solid #fed7aa; /* orange-200 */
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* 各行を横並びに整列 */
+#search-form #filters-content > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* チェックボックスの見た目 */
+#search-form #filters-content input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #f97316;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* ラベル */
+#search-form #filters-content label {
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: normal;
+}
+
+/* モバイル微調整 */
+@media (max-width: 480px) {
+  #search-form #filters-content {
+    padding: 10px;
+  }
+  #search-form #filters-content input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+  #search-form #filters-content label {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==============================
+   💬 検索結果カテゴリバッジ（薄灰色丸囲み）
+============================== */
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 9999px; /* 丸型 */
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b5563; /* text-gray-700 */
+  background-color: #f3f4f6; /* bg-gray-100 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* モバイル最適化 */
+@media (max-width: 480px) {
+  .category-badge {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+  }
 }

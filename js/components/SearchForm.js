@@ -133,7 +133,6 @@ class SearchForm {
                             ${this.showFilters ? 'こだわり条件を閉じる' : 'こだわり条件で絞り込む'}
                         </button>
 
-
                         <!-- こだわり条件 -->
                         <div id="filters-content" class="${this.showFilters ? '' : 'hidden'} bg-orange-50 p-4 rounded-lg space-y-3 border-2 border-orange-200">
                             <p class="font-bold text-gray-800 mb-3">こだわり条件</p>
