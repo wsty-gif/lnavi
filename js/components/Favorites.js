@@ -2,19 +2,28 @@
 class Favorites {
     constructor(container, options = {}) {
         this.container = container;
-        this.favorites = [];
+        this.favorites = [];           // ← ここを真実として扱う（renderでLSを再読込しない）
         this.accounts = [];
         this.isLoading = false;
-        this.onToggleFavorite = options.onToggleFavorite || (() => {});
-        this.onAccountClick = options.onAccountClick || (() => {});
-        this.onBackToSearch = options.onBackToSearch || (() => {});
-        
-        this.loadFavorites();
+
+        // 親(App)へのコールバックは保持するが、ここからは呼ばない（復活防止）
+        this.onToggleFavorite = options.onToggleFavorite || null;
+        this.onAccountClick   = options.onAccountClick   || (() => {});
+        this.onBackToSearch   = options.onBackToSearch   || (() => {});
+
+        // イベント委譲（再描画してもハンドラが消えない）
+        this._onClick = this._onClick.bind(this);
+        this.container.addEventListener('click', this._onClick);
+
+        this._loadFavoritesFromLS();
     }
 
-    loadFavorites() {
-        const savedFavorites = localStorage.getItem('line_account_favorites');
-        this.favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+    _loadFavoritesFromLS() {
+        try {
+            this.favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+        } catch {
+            this.favorites = [];
+        }
     }
 
     async show() {
@@ -22,36 +31,30 @@ class Favorites {
         this.render();
 
         try {
-            // ✅ 表示前にLocalStorageの最新状態を再取得
-            this.loadFavorites();
-
-            // ✅ アカウント全件を取得
             this.accounts = await DataService.getAllAccounts();
+            // 表示直前に一度だけLSを読み込んで this.favorites を初期化
+            this._loadFavoritesFromLS();
 
             this.isLoading = false;
-            this.render();
-            this.bindEvents();
-        } catch (error) {
-            console.error('Failed to load accounts:', error);
+            this.render(); // この後は render 内でLS再読込しない
+        } catch (err) {
+            console.error('Failed to load accounts:', err);
             this.isLoading = false;
             this.render();
         }
     }
 
-
     render() {
-        // 最新のローカルストレージを読み込む
-        this.loadFavorites();
-
-        const favoriteAccounts = this.accounts.filter(account =>
-            this.favorites.includes(String(account.id))
-        );
+        // 🚫 ここで LS を再読込しない（復活の原因）。常に this.favorites を真実とする
+        const favoriteAccounts = this.accounts.filter(acc => this.favorites.includes(String(acc.id)));
 
         this.container.innerHTML = `
             <div class="space-y-8">
+                <!-- ヘッダー -->
                 <div>
                     <button class="back-to-search mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>検索に戻る
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        検索に戻る
                     </button>
                     <div class="flex items-center gap-3">
                         <i data-lucide="heart" class="w-8 h-8 text-red-500 fill-current"></i>
@@ -64,6 +67,7 @@ class Favorites {
                     </div>
                 </div>
 
+                <!-- コンテンツ -->
                 ${this.isLoading ? `
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         ${Array(6).fill(0).map(() => `<div class="h-96 bg-gray-100 rounded-lg animate-pulse"></div>`).join('')}
@@ -79,8 +83,8 @@ class Favorites {
                         ${favoriteAccounts.map((account, i) => {
                             const card = new AccountCard(account, {
                                 index: i,
-                                isFavorite: true,
-                                onToggleFavorite: this.handleToggleFavorite.bind(this),
+                                isFavorite: true, // 確認画面なので常に true で描画
+                                // ここへは渡さない： onToggleFavorite は内部で処理するため
                                 onAccountClick: this.onAccountClick
                             });
                             return card.render();
@@ -93,121 +97,59 @@ class Favorites {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    bindEvents() {
-        // 戻るボタン
-        const backBtns = this.container.querySelectorAll('.back-to-search, .back-to-search-btn');
-        backBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.onBackToSearch();
-            });
-        });
+    // クリックの一括ハンドラ（イベント委譲）
+    _onClick(e) {
+        // 戻る
+        if (e.target.closest('.back-to-search')) {
+            this.onBackToSearch();
+            return;
+        }
 
-        // ✅ お気に入りトグルボタンのクリック処理
-        const favBtns = this.container.querySelectorAll('.favorite-btn');
-        favBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = String(btn.dataset.accountId);
+        // お気に入りトグル
+        const favBtn = e.target.closest('.favorite-btn');
+        if (favBtn) {
+            e.stopPropagation();
+            const id = String(favBtn.dataset.accountId);
+            this._toggleFavorite(id);
+            return;
+        }
 
-                // LocalStorageの状態を取得
-                let stored = [];
-                try {
-                    stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
-                } catch {
-                    stored = [];
-                }
-
-                const isFavorite = stored.includes(id);
-
-                // トグル処理
-                const updated = isFavorite
-                    ? stored.filter(fav => fav !== id)
-                    : [...stored, id];
-
-                // LocalStorageを更新
-                localStorage.setItem('line_account_favorites', JSON.stringify(updated));
-
-                // ✅ 画面を即時更新
-                this.favorites = updated;
-                this.render();
-                this.bindEvents();
-
-                // ✅ app.jsにも反映（検索結果のハートを更新）
-                if (this.onToggleFavorite) {
-                    this.onToggleFavorite(id, "favorites");
-                }
-            });
-        });
-    }
-
-    // ★ お気に入りボタンを個別にバインド
-    bindFavoriteButtons() {
-        const buttons = this.container.querySelectorAll('.favorite-btn');
-        buttons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const accountId = String(btn.dataset.accountId);
-                this.handleToggleFavorite(accountId);
-            });
-        });
-    }
-
-handleToggleFavorite(accountId) {
-    const id = String(accountId);
-
-    // LocalStorageから最新状態を取得し文字列化
-    const stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]')
-        .map(String);
-
-    const isFavorite = stored.includes(id);
-
-    // トグル処理
-    const updated = isFavorite
-        ? stored.filter(fav => fav !== id)
-        : [...stored, id];
-
-    // LocalStorage保存
-    localStorage.setItem('line_account_favorites', JSON.stringify(updated));
-    this.favorites = updated; // ← 最新状態を保持
-
-    // UI反映
-    this.applyFavoriteState(id, !isFavorite);
-
-    // 親に通知（検索画面との同期用）
-    if (this.onToggleFavorite) this.onToggleFavorite(id, "favorites");
-
-    // 🔹お気に入り解除の場合のみ再描画してリストを減らす
-    if (isFavorite) {
-        this.render();
-        this.bindEvents();
-        this.bindFavoriteButtons();
-    }
-}
-
-
-
-    applyFavoriteState(accountId, isFavorite) {
-        const btn = this.container.querySelector(`.favorite-btn[data-account-id="${accountId}"]`);
-        if (!btn) return;
-
-        const icon =
-            btn.querySelector('svg[data-lucide="heart"]') ||
-            btn.querySelector('svg.lucide-heart') ||
-            btn.querySelector('i[data-lucide="heart"]');
-
-        if (!icon) return;
-
-        if (isFavorite) {
-            icon.classList.add('text-red-500', 'fill-current');
-            icon.classList.remove('text-gray-400');
-            icon.setAttribute('fill', 'currentColor');
-            icon.setAttribute('stroke', 'currentColor');
-        } else {
-            icon.classList.remove('text-red-500', 'fill-current');
-            icon.classList.add('text-gray-400');
-            icon.setAttribute('fill', 'none');
-            icon.setAttribute('stroke', 'currentColor');
+        // カード本体クリック → 詳細へ
+        const card = e.target.closest('.account-card');
+        if (card && card.dataset.accountId) {
+            this.onAccountClick(card.dataset.accountId);
         }
     }
 
+    _toggleFavorite(id) {
+        // 常に最新のLSから開始
+        let stored = [];
+        try {
+            stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+        } catch {
+            stored = [];
+        }
+
+        const isFavorite = stored.includes(id);
+        const updated = isFavorite ? stored.filter(f => f !== id)
+                                   : [...stored, id];
+
+        // LS とクラス状態を更新（同期）
+        localStorage.setItem('line_account_favorites', JSON.stringify(updated));
+        this.favorites = updated;
+
+        // DOM から該当カードを即時削除（1回で消える）
+        if (isFavorite) {
+            const card = this.container.querySelector(`.account-card[data-account-id="${id}"]`);
+            if (card) card.remove();
+        }
+
+        // すべて消えたら空表示へ
+        if (this.container.querySelectorAll('.account-card').length === 0) {
+            this.render();
+        }
+
+        // 🔇 親(app.js)へは通知しない（ここからの再トグルで復活するのを防止）
+        // 必要なら戻って検索画面を開いた時点で、その画面側は LS を基に表示が揃います
+    }
 }

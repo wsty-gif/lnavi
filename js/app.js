@@ -138,37 +138,31 @@ class LineAccountSearchApp {
 handleToggleFavorite(accountId, source = "search") {
     const id = String(accountId);
 
-    // ✅ LocalStorageの最新状態を取得
-    let stored = [];
-    try {
-        stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
-    } catch {
-        stored = [];
-    }
-
+    // LocalStorageの最新状態
+    const stored = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
     const isFavorite = stored.includes(id);
 
-    // ✅ 検索画面からの操作時のみLocalStorageを更新
+    // ✅ 検索画面からの操作のみトグル処理を行う
     if (source === "search") {
         const updated = isFavorite
             ? stored.filter(fav => fav !== id)
-            : Array.from(new Set([...stored, id]));
-
+            : [...stored, id];
         localStorage.setItem('line_account_favorites', JSON.stringify(updated));
     }
 
-    // ✅ 検索結果のUIに反映
+    // ✅ お気に入り画面や同期通知の場合はトグルせず再描画のみ
+    const refreshed = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
+
     if (this.searchResults && typeof this.searchResults.applyFavoriteState === 'function') {
-        this.searchResults.applyFavoriteState(id, !isFavorite);
+        this.searchResults.applyFavoriteState(id, refreshed.includes(id));
     }
 
-    // ✅ お気に入りページが開いていたらLocalStorageの最新状態を再反映
     if (this.currentPage === 'favorites' && this.favorites) {
-        const refreshed = JSON.parse(localStorage.getItem('line_account_favorites') || '[]').map(String);
         this.favorites.favorites = refreshed;
         this.favorites.render();
     }
 }
+
 
 
 
