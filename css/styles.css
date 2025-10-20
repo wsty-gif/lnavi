@@ -207,3 +207,7 @@ LINE友だち追加ボタンのサイズ調整
     border-radius: 8px; /* ← 角を丸める */
     overflow: hidden;   /* はみ出し防止（念のため） */
 }
+
+.no-wrap {
+  white-space: nowrap;
+}
