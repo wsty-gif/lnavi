@@ -539,66 +539,76 @@ html, body {
 /* =============================
    📸 Instagramボタン（検索画面用）
 ============================= */
+/* =============================
+   📸 Instagramボタン（検索画面専用・160px）
+============================= */
 .insta_btn2 {
   color: #FFF;
   border-radius: 7px;
   position: relative;
-  display: inline-block;
-  height: 44px;
-  width: 160px;
-  text-align: center;
-  font-size: 25px;
-  line-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 50px;
+  width: 160px; /* ✅ 検索画面は160px固定 */
+  font-size: 18px;
+  font-weight: 600;
   background: linear-gradient(135deg, #427eff 0%, #f13f79 70%) no-repeat;
-  overflow: hidden;
+  border: none;
   text-decoration: none;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
+
 .insta_btn2 .fa-instagram {
-  font-size: 28px;
-  position: relative;
-  top: 3px;
+  font-size: 26px;
+  line-height: 1;
 }
+
 .insta_btn2 span {
-  font-size: 20px;
   display: inline-block;
-  position: relative;
   transition: 0.5s;
 }
+
 .insta_btn2:hover span {
   transform: rotateX(360deg);
 }
 
+
 /* =============================
-   📸 Instagramボタン（詳細画面用・サイズ大）
+   📸 Instagramボタン（詳細画面専用・独立サイズ）
 ============================= */
 .insta_btn_detail {
   color: #FFF;
   border-radius: 7px;
-  position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   height: 50px;
-  width: 190px;
-  text-align: center;
-  font-size: 25px;
-  line-height: 50px;
+  width: 190px; /* ✅ 詳細画面専用のサイズ（LINEと統一） */
+  font-size: 20px;
+  font-weight: 600;
   background: linear-gradient(135deg, #427eff 0%, #f13f79 70%) no-repeat;
-  overflow: hidden;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
+
 .insta_btn_detail .fa-instagram {
-  font-size: 35px;
-  position: relative;
-  top: 4px;
+  font-size: 30px;
+  line-height: 1;
 }
+
 .insta_btn_detail span {
   display: inline-block;
-  position: relative;
-  transition: .5s;
+  transition: 0.5s;
 }
+
 .insta_btn_detail:hover span {
   transform: rotateX(360deg);
 }
+
 
 /* =============================
    💚 LINEボタン（Instagramと統一デザイン）
