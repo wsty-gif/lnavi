@@ -222,12 +222,26 @@ class Detail {
                         <!-- サイドバー -->
                         <div class="space-y-6">
                             <div class="bg-white rounded-lg shadow-md sticky top-4">
-                                <div class="p-6 space-y-4">
-                                    <a href="https://line.me/R/ti/p/@${this.account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block w-full">
-                                        <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
-                                            alt="友だち追加"
-                                            class="line-add-btn w-full rounded-lg overflow-hidden">
-                                    </a>
+                                <div class="p-6 space-y-4 text-center">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <a href="https://line.me/R/ti/p/@${this.account.line_id}" 
+                                        target="_blank" rel="noopener noreferrer" 
+                                        class="line-add-btn">
+                                        <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
+                                                alt="友だち追加">
+                                        </a>
+
+                                        ${this.account.instagram_url ? `
+                                            <div class="flex justify-center">
+                                                <a href="${this.account.instagram_url}" 
+                                                target="_blank" rel="noopener noreferrer" 
+                                                class="insta_btn_detail">
+                                                    <i class="fab fa-instagram"></i> <span>Instagram</span>
+                                                </a>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+
                                     ${this.account.line_benefits ? `
                                         <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
                                             <div class="flex items-start gap-3">
@@ -236,20 +250,6 @@ class Detail {
                                                     <p class="font-semibold text-green-900 mb-2">LINE追加特典</p>
                                                     <p class="text-sm text-green-800">${this.account.line_benefits}</p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-
-                                    ${this.account.line_features && this.account.line_features.length > 0 ? `
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <p class="font-semibold text-gray-900 mb-3">LINEでできること</p>
-                                            <div class="space-y-2">
-                                                ${this.account.line_features.map(feature => `
-                                                    <div class="flex items-start gap-2">
-                                                        <i data-lucide="check" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5"></i>
-                                                        <span class="text-sm text-gray-700">${feature}</span>
-                                                    </div>
-                                                `).join('')}
                                             </div>
                                         </div>
                                     ` : ''}

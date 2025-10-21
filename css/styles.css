@@ -535,3 +535,99 @@ html, body {
     padding: 3px 8px;
   }
 }
+
+/* =============================
+   📸 Instagramボタン（検索画面用）
+============================= */
+.insta_btn2 {
+  color: #FFF;
+  border-radius: 7px;
+  position: relative;
+  display: inline-block;
+  height: 44px;
+  width: 160px;
+  text-align: center;
+  font-size: 25px;
+  line-height: 44px;
+  background: linear-gradient(135deg, #427eff 0%, #f13f79 70%) no-repeat;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.insta_btn2 .fa-instagram {
+  font-size: 28px;
+  position: relative;
+  top: 3px;
+}
+.insta_btn2 span {
+  font-size: 20px;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.insta_btn2:hover span {
+  transform: rotateX(360deg);
+}
+
+/* =============================
+   📸 Instagramボタン（詳細画面用・サイズ大）
+============================= */
+.insta_btn_detail {
+  color: #FFF;
+  border-radius: 7px;
+  position: relative;
+  display: inline-block;
+  height: 50px;
+  width: 190px;
+  text-align: center;
+  font-size: 25px;
+  line-height: 50px;
+  background: linear-gradient(135deg, #427eff 0%, #f13f79 70%) no-repeat;
+  overflow: hidden;
+  text-decoration: none;
+}
+.insta_btn_detail .fa-instagram {
+  font-size: 35px;
+  position: relative;
+  top: 4px;
+}
+.insta_btn_detail span {
+  display: inline-block;
+  position: relative;
+  transition: .5s;
+}
+.insta_btn_detail:hover span {
+  transform: rotateX(360deg);
+}
+
+/* =============================
+   💚 LINEボタン（Instagramと統一デザイン）
+============================= */
+.line-add-btn {
+  display: inline-block;
+  height: 50px;
+  width: 190px;
+  border-radius: 7px;
+  overflow: hidden;
+  background-color: #06c755; /* LINEのブランドカラー */
+  text-align: center;
+  line-height: 50px;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.line-add-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.line-add-btn img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}

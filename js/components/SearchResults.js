@@ -88,11 +88,17 @@ class SearchResults {
                             <i data-lucide="gift" class="w-4 h-4 mr-1"></i>
                             <span class="text-sm">${account.line_benefits || ''}</span>
                         </div>
-                        <div class="text-center">
-                            <a href="https://line.me/R/ti/p/@${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
-                                <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
-                                     alt="友だち追加" class="inline-block w-[160px] h-auto mx-auto">
-                            </a>
+                        <div class="text-center flex justify-center gap-3">
+                            ${account.line_id ? `
+                                <a href="https://line.me/R/ti/p/@${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
+                                    <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+                                        alt="友だち追加" class="inline-block w-[160px] h-auto mx-auto">
+                                </a>` : ''}
+
+                            ${account.instagram_url ? `
+                                <a href="${account.instagram_url}" target="_blank" rel="noopener noreferrer" class="insta_btn2">
+                                    <i class="fab fa-instagram"></i> <span>Instagram</span>
+                                </a>` : ''}
                         </div>
                     </div>
                 </div>
