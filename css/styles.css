@@ -641,3 +641,17 @@ html, body {
   object-fit: cover;
   border-radius: 7px;
 }
+
+.line-benefit-box {
+  background: linear-gradient(to right, #ecfdf5, #d1fae5);
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.line-benefit-box:hover {
+  transform: scale(1.02);
+  background: linear-gradient(to right, #bbf7d0, #a7f3d0);
+}
