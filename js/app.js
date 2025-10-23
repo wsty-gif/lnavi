@@ -115,13 +115,13 @@ class LineAccountSearchApp {
     async handleSearch(filters) {
         try {
             // ローディング状態にする
-            this.searchResults.setAccounts([], true, true);
+            this.searchResults.show(accounts);
             
             // 検索実行
             const results = await DataService.searchAccounts(filters);
             
             // 結果を表示
-            this.searchResults.setAccounts(results, false, true);
+            this.searchResults.show(accounts);
             this.hasSearched = true;
             
             // 検索ページに移動（お気に入りページにいた場合）
@@ -131,7 +131,7 @@ class LineAccountSearchApp {
             
         } catch (error) {
             console.error('Search failed:', error);
-            this.searchResults.setAccounts([], false, true);
+            this.searchResults.show(accounts);
         }
     }
     
