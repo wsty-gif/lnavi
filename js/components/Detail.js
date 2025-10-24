@@ -202,20 +202,6 @@ class Detail {
                                         </button>
                                     </div>
                                 ` : ''}
-
-                                <!-- タグ -->
-                                ${this.account.tags && this.account.tags.length > 0 ? `
-                                    <div class="pt-4 border-t">
-                                        <p class="text-sm text-gray-500 mb-2">タグ</p>
-                                        <div class="flex flex-wrap gap-2">
-                                            ${this.account.tags.map(tag => `
-                                                <span class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                                    #${tag}
-                                                </span>
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                ` : ''}
                             </div>
                         </div>
 
@@ -243,13 +229,10 @@ class Detail {
                                     </div>
 
                                     ${this.account.line_benefits ? `
-                                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
-                                            <div class="flex items-start gap-3">
-                                                <i data-lucide="gift" class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5"></i>
-                                                <div>
-                                                    <p class="font-semibold text-green-900 mb-2">LINE追加特典</p>
-                                                    <p class="text-sm text-green-800">${this.account.line_benefits}</p>
-                                                </div>
+                                        <div class="bg-green-50 border border-green-300 rounded-lg p-3 text-center shadow-sm">
+                                            <div class="inline-flex items-center justify-center gap-1 text-green-800 font-semibold text-sm">
+                                                <i data-lucide="gift" class="w-4 h-4 text-green-700"></i>
+                                                <span>${this.account.line_benefits}</span>
                                             </div>
                                         </div>
                                     ` : ''}
