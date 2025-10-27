@@ -230,19 +230,22 @@ class Detail {
                         <!-- サイドバー -->
                         <div class="space-y-4">
                         <div class="bg-white rounded-lg shadow-sm sticky top-3">
-                            <div class="p-4 space-y-3 text-center">
-                            <div class="flex flex-col items-center gap-2">
+                            <div class="p-4 text-center">
+                            <!-- ✅ 横並びエリア -->
+                            <div class="flex flex-wrap justify-center items-center gap-3">
+                                <!-- LINEボタン -->
                                 <a href="https://line.me/R/ti/p/@${this.account.line_id}" 
                                 target="_blank" rel="noopener noreferrer" 
-                                class="line-add-btn">
+                                class="line-add-btn w-[190px]">
                                 <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
-                                    alt="友だち追加" class="w-44 mx-auto">
+                                    alt="友だち追加" class="w-full h-auto rounded-[7px]">
                                 </a>
 
+                                <!-- Instagramボタン（横幅をLINEと統一） -->
                                 ${this.account.instagram_url ? `
                                 <a href="${this.account.instagram_url}" 
                                     target="_blank" rel="noopener noreferrer" 
-                                    class="insta_btn2">
+                                    class="insta_btn2 w-[190px]">
                                     <i class="fab fa-instagram"></i> 
                                     <span>Instagram</span>
                                 </a>` : ''}
@@ -250,6 +253,7 @@ class Detail {
                             </div>
                         </div>
                         </div>
+
                     </div>
                 </div>
             </div>`;

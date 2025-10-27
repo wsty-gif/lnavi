@@ -641,3 +641,16 @@ html, body {
   object-fit: cover;
   border-radius: 7px;
 }
+
+/* ✅ 横並び時のバランス調整 */
+.line-add-btn,
+.insta_btn2 {
+  width: 190px !important; /* 両方を統一 */
+  height: 50px;
+  border-radius: 7px;
+}
+
+/* ✅ ボタンが隣同士でも自然な余白に */
+.flex.justify-center.items-center.gap-3 {
+  gap: 12px; /* 適度な間隔に */
+}
