@@ -185,4 +185,18 @@ class SearchResults {
             icon.setAttribute('stroke', 'currentColor');
         }
     }
+
+    // 🔧 検索結果 0件時の提案メッセージを表示（修正版）
+    showSuggestionMessage(html) {
+        this.isLoading = false;
+        this.isEmpty = true;
+        this.container.innerHTML = `
+            <div class="flex justify-center items-center py-16">
+                <div class="max-w-lg w-full text-center bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    ${html}
+                </div>
+            </div>
+        `;
+    }
+
 }

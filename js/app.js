@@ -163,29 +163,28 @@ class LineAccountSearchApp {
             // ✅ 検索結果が0件だった場合、提案メッセージを表示
             if (accounts.length === 0) {
                 this.searchResults.showSuggestionMessage(`
-                    <div class="text-center bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">該当する店舗が見つかりませんでした。</h3>
-                        <p class="text-gray-600 mb-4">人気の条件で再検索してみませんか？</p>
-                        <div class="flex flex-wrap justify-center gap-2">
-                            <button class="suggestion-btn" data-filter="has_line_benefit">🎁 LINE特典あり</button>
-                            <button class="suggestion-btn" data-filter="is_recommended">⭐ おすすめ店舗</button>
-                            <button class="suggestion-btn" data-filter="has_instagram">📸 Instagramあり</button>
-                            <button class="suggestion-btn" data-filter="can_reserve_online">📅 LINEから予約</button>
-                        </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">該当する店舗が見つかりませんでした。</h3>
+                    <p class="text-gray-600 mb-4">人気の条件で再検索してみませんか？</p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="has_line_benefit">🎁 LINE特典あり</button>
+                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-orange-400 to-red-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="is_recommended">⭐ おすすめ店舗</button>
+                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="has_instagram">📸 Instagramあり</button>
+                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="can_reserve_online">📅 LINEから予約</button>
                     </div>
                 `);
 
                 // ✅ ボタンイベント登録（提案条件をONにして再検索）
-                document.querySelectorAll('.suggestion-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const key = btn.dataset.filter;
-                        filters[key] = true;
-                        this.handleSearch(filters); // 再検索
+                setTimeout(() => {
+                    document.querySelectorAll('.suggestion-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const key = btn.dataset.filter;
+                            filters[key] = true;
+                            this.handleSearch(filters);
+                        });
                     });
-                });
-            } else {
-                this.searchResults.setAccounts(accounts);
+                }, 200);
             }
+
 
         } catch (err) {
             console.error("Search failed:", err);
