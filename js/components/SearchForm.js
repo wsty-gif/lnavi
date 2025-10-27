@@ -17,7 +17,6 @@ class SearchForm {
         this.onSearch = options.onSearch || (() => {});
         this.allAccounts = [];
         this.showFilters = false;
-
         this.init();
     }
 
@@ -225,9 +224,7 @@ class SearchForm {
 
     // ▼ 都道府県→市区町村→エリアの連動ロジック
     getAvailableCities() {
-        if (!this.filters.prefecture || this.filters.prefecture === "全て") {
-            return ["全て"];
-        }
+        if (!this.filters.prefecture || this.filters.prefecture === "全て") return ["全て"];
         const cities = [...new Set(
             this.allAccounts
                 .filter(a => a.prefecture === this.filters.prefecture)
@@ -247,7 +244,6 @@ class SearchForm {
             )];
             return ["全て", ...areas.sort()];
         }
-
         const areas = [...new Set(
             this.allAccounts
                 .filter(a =>
@@ -261,9 +257,8 @@ class SearchForm {
     }
 
     getAvailableDetailCategories() {
-        if (!this.filters.category_main || this.filters.category_main === "全て") {
-            return ["全て"];
-        }
-        return ["全て", ...(DETAIL_CATEGORIES[this.filters.category_main] || [])];
+        if (!this.filters.category_main || this.filters.category_main === "全て") return ["全て"];
+        const categories = DETAIL_CATEGORIES[this.filters.category_main] || [];
+        return ["全て", ...new Set(categories.filter(c => c !== "全て"))];
     }
 }
