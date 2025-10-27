@@ -52,9 +52,6 @@ class AccountCard {
                         <h3 class="text-xl font-black text-gray-900 line-clamp-1">
                             ${this.account.account_name}
                         </h3>
-                        ${this.account.is_verified ? `
-                            <i data-lucide="check-circle" class="w-5 h-5 text-green-600 flex-shrink-0"></i>
-                        ` : ''}
                     </div>
 
                     <!-- カテゴリーバッジ -->

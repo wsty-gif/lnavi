@@ -114,27 +114,39 @@ class LineAccountSearchApp {
     
     async handleSearch(filters) {
         try {
-            // ローディング状態にする
-            this.searchResults.setAccounts([], true, true);
-            
-            // 検索実行
-            const results = await DataService.searchAccounts(filters);
-            
-            // 結果を表示
-            this.searchResults.setAccounts(results, false, true);
-            this.hasSearched = true;
-            
-            // 検索ページに移動（お気に入りページにいた場合）
-            if (this.currentPage !== 'search') {
-                this.showPage('search');
-            }
-            
-        } catch (error) {
-            console.error('Search failed:', error);
-            this.searchResults.setAccounts([], false, true);
+            this.searchResults.showLoading();
+
+            let accounts = await DataService.getAllAccounts();
+
+            accounts = accounts.filter(acc => {
+                if (filters.prefecture !== "全て" && acc.prefecture !== filters.prefecture) return false;
+                if (filters.city !== "全て" && acc.city !== filters.city) return false;
+                if (filters.area !== "全て" && acc.area !== filters.area) return false;
+                if (filters.category_main !== "全て" && acc.service_category_main !== filters.category_main) return false;
+                if (filters.category_detail !== "全て" && acc.service_category_detail !== filters.category_detail) return false;
+
+                if (filters.keyword && !(
+                    acc.account_name?.toLowerCase().includes(filters.keyword) ||
+                    acc.description?.toLowerCase().includes(filters.keyword)
+                )) return false;
+
+                // ✅ こだわり条件
+                if (filters.has_line_benefit && !acc.line_benefits) return false;
+                if (filters.is_recommended && acc.is_recommended !== true) return false;
+                if (filters.has_instagram && !acc.instagram_url) return false;
+                if (filters.can_reserve_online && !(acc.line_features?.includes("LINEから予約可能"))) return false;
+
+                return true;
+            });
+
+            this.searchResults.setAccounts(accounts);
+
+        } catch (err) {
+            console.error("Search failed:", err);
+            this.searchResults.show([]);
         }
     }
-    
+
 handleToggleFavorite(accountId, source = "search") {
     const id = String(accountId);
 
