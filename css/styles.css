@@ -645,7 +645,7 @@ html, body {
 /* ✅ 横並び時のバランス調整 */
 .line-add-btn,
 .insta_btn2 {
-  width: 190px !important; /* 両方を統一 */
+  width: 160px !important; /* 両方を統一 */
   height: 50px;
   border-radius: 7px;
 }
