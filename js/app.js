@@ -112,87 +112,76 @@ class LineAccountSearchApp {
         this.currentPage = page;
     }
     
-    async handleSearch(filters) {
-        try {
-            this.searchResults.showLoading();
+async handleSearch(filters) {
+  try {
+    this.searchResults.showLoading();
 
-            let accounts = await DataService.getAllAccounts();
-
-            accounts = accounts.filter(acc => {
-                // -------------------------
-                // 🗾 地域・カテゴリフィルター
-                // -------------------------
-                if (filters.prefecture !== "全て" && acc.prefecture !== filters.prefecture) return false;
-                if (filters.city !== "全て" && acc.city !== filters.city) return false;
-                if (filters.area !== "全て" && acc.area !== filters.area) return false;
-                if (filters.category_main !== "全て" && acc.service_category_main !== filters.category_main) return false;
-                if (filters.category_detail !== "全て" && acc.service_category_detail !== filters.category_detail) return false;
-
-                // -------------------------
-                // 🔍 キーワード検索
-                // -------------------------
-                if (filters.keyword && !(
-                    (acc.account_name && acc.account_name.toLowerCase().includes(filters.keyword.toLowerCase())) ||
-                    (acc.description && acc.description.toLowerCase().includes(filters.keyword.toLowerCase()))
-                )) return false;
-
-                // -------------------------
-                // 🎯 こだわり条件フィルター
-                // -------------------------
-
-                // 1️⃣ LINE友だち特典あり
-                if (filters.has_line_benefit && (!acc.line_benefits || acc.line_benefits.trim() === "")) return false;
-
-                // 2️⃣ おすすめ店舗のみ（true / FALSE / "TRUE" どれでもOK）
-                if (filters.is_recommended && acc.is_recommended !== true && acc.is_recommended !== "TRUE") return false;
-
-                // 3️⃣ Instagramあり
-                if (filters.has_instagram && (!acc.instagram_url || acc.instagram_url.trim() === "")) return false;
-
-                // 4️⃣ LINEから予約可能（line_features配列に"LINEから予約可能"を含む）
-                if (filters.can_reserve_online) {
-                    const features = Array.isArray(acc.line_features)
-                        ? acc.line_features
-                        : (acc.line_features ? JSON.parse(acc.line_features) : []);
-                    if (!features.includes("LINEから予約可能")) return false;
-                }
-
-                return true;
-            });
-
-            // ✅ 検索結果が0件だった場合、提案メッセージを表示
-            if (accounts.length === 0) {
-                this.searchResults.showSuggestionMessage(`
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">該当する店舗が見つかりませんでした。</h3>
-                    <p class="text-gray-600 mb-4">人気の条件で再検索してみませんか？</p>
-                    <div class="flex flex-wrap justify-center gap-2">
-                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="has_line_benefit">🎁 LINE特典あり</button>
-                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-orange-400 to-red-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="is_recommended">⭐ おすすめ店舗</button>
-                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="has_instagram">📸 Instagramあり</button>
-                        <button class="suggestion-btn px-3 py-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition" data-filter="can_reserve_online">📅 LINEから予約</button>
-                    </div>
-                `);
-
-                // ✅ ボタンイベント登録（提案条件をONにして再検索）
-                setTimeout(() => {
-                    document.querySelectorAll('.suggestion-btn').forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            const key = btn.dataset.filter;
-                            filters[key] = true;
-                            this.handleSearch(filters);
-                        });
-                    });
-                }, 200);
-            }
-
-
-        } catch (err) {
-            console.error("Search failed:", err);
-            this.searchResults.show([]);
-        }
+    let accounts = await DataService.getAllAccounts();
+    if (!accounts || !Array.isArray(accounts)) {
+      throw new Error("データの取得に失敗しました");
     }
 
+    // --- フィルター処理 ---
+    accounts = accounts.filter(acc => {
+      if (filters.prefecture !== "全て" && acc.prefecture !== filters.prefecture) return false;
+      if (filters.city !== "全て" && acc.city !== filters.city) return false;
+      if (filters.area !== "全て" && acc.area !== filters.area) return false;
+      if (filters.category_main !== "全て" && acc.service_category_main !== filters.category_main) return false;
+      if (filters.category_detail !== "全て" && acc.service_category_detail !== filters.category_detail) return false;
 
+      if (filters.keyword) {
+        const kw = filters.keyword.toLowerCase();
+        const desc = acc.description ? acc.description.toLowerCase() : "";
+        const name = acc.account_name ? acc.account_name.toLowerCase() : "";
+        if (!name.includes(kw) && !desc.includes(kw)) return false;
+      }
+
+      if (filters.has_line_benefit && (!acc.line_benefits || acc.line_benefits.trim() === "")) return false;
+      if (filters.is_recommended && !(acc.is_recommended === true || acc.is_recommended === "TRUE")) return false;
+      if (filters.has_instagram && (!acc.instagram_url || acc.instagram_url.trim() === "")) return false;
+
+      if (filters.can_reserve_online) {
+        const features = Array.isArray(acc.line_features)
+          ? acc.line_features
+          : (acc.line_features ? JSON.parse(acc.line_features) : []);
+        if (!features.includes("LINEから予約可能")) return false;
+      }
+
+      return true;
+    });
+
+    // --- 結果表示 ---
+    if (accounts.length === 0) {
+      this.searchResults.showSuggestionMessage(`
+        <h3 class="text-lg font-bold text-gray-800 mb-2">該当する店舗が見つかりませんでした。</h3>
+        <p class="text-gray-600 mb-4">人気の条件で再検索してみませんか？</p>
+        <div class="flex flex-wrap justify-center gap-2">
+          <button class="suggestion-btn px-3 py-2 bg-green-500 text-white font-semibold rounded-lg hover:opacity-90" data-filter="has_line_benefit">🎁 LINE特典あり</button>
+          <button class="suggestion-btn px-3 py-2 bg-orange-500 text-white font-semibold rounded-lg hover:opacity-90" data-filter="is_recommended">⭐ おすすめ店舗</button>
+          <button class="suggestion-btn px-3 py-2 bg-pink-500 text-white font-semibold rounded-lg hover:opacity-90" data-filter="has_instagram">📸 Instagramあり</button>
+          <button class="suggestion-btn px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:opacity-90" data-filter="can_reserve_online">📅 LINEから予約</button>
+        </div>
+      `);
+
+      // ✅ 描画完了後にボタンイベントを確実に付与
+      setTimeout(() => {
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.filter;
+            filters[key] = true;
+            this.handleSearch(filters);
+          });
+        });
+      }, 100);
+    } else {
+      this.searchResults.setAccounts(accounts);
+    }
+
+  } catch (err) {
+    console.error("Search failed:", err);
+    this.searchResults.show([]);
+  }
+}
 
 handleToggleFavorite(accountId, source = "search") {
     const id = String(accountId);

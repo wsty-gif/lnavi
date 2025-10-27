@@ -655,11 +655,12 @@ html, body {
   gap: 12px; /* 適度な間隔に */
 }
 
-/* こだわり条件ブロックを左詰めに */
+/* 💚 こだわり条件の左詰め */
 #filters-content {
   text-align: left !important;
 }
 
 #filters-content .flex.items-center.space-x-3 {
   justify-content: flex-start !important;
+  margin-left: 0 !important;
 }
