@@ -229,25 +229,26 @@ class Detail {
 
                         <!-- サイドバー -->
                         <div class="space-y-4">
-                            <div class="bg-white rounded-lg shadow-sm sticky top-3">
-                                <div class="p-4 space-y-3 text-center">
-                                    <div class="flex flex-col items-center gap-2">
-                                        <a href="https://line.me/R/ti/p/@${this.account.line_id}" target="_blank" rel="noopener noreferrer" class="line-add-btn">
-                                            <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" class="w-44 mx-auto">
-                                        </a>
-                                        ${
-                                            this.account.instagram_url
-                                                ? `
-                                            <div class="flex justify-center">
-                                                <a href="${this.account.instagram_url}" target="_blank" rel="noopener noreferrer" class="insta_btn_detail text-sm text-gray-700 hover:text-green-600">
-                                                    <i class="fab fa-instagram mr-1"></i>Instagram
-                                                </a>
-                                            </div>`
-                                                : ""
-                                        }
-                                    </div>
-                                </div>
+                        <div class="bg-white rounded-lg shadow-sm sticky top-3">
+                            <div class="p-4 space-y-3 text-center">
+                            <div class="flex flex-col items-center gap-2">
+                                <a href="https://line.me/R/ti/p/@${this.account.line_id}" 
+                                target="_blank" rel="noopener noreferrer" 
+                                class="line-add-btn">
+                                <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
+                                    alt="友だち追加" class="w-44 mx-auto">
+                                </a>
+
+                                ${this.account.instagram_url ? `
+                                <a href="${this.account.instagram_url}" 
+                                    target="_blank" rel="noopener noreferrer" 
+                                    class="insta_btn2">
+                                    <i class="fab fa-instagram"></i> 
+                                    <span>Instagram</span>
+                                </a>` : ''}
                             </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

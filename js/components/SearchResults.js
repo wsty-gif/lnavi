@@ -56,49 +56,51 @@ class SearchResults {
     }
 
     renderAccountCard(account) {
-        const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
-        const isFavorite = favorites.includes(String(account.id));
+    const favorites = JSON.parse(localStorage.getItem('line_account_favorites') || '[]');
+    const isFavorite = favorites.includes(String(account.id));
 
-        return `
-            <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in flex flex-col" data-account-id="${account.id}">
-                <div class="relative">
-                    <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
-                    <button 
-                        class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg bg-white/90 text-gray-600 hover:bg-white hover:scale-110" 
-                        data-account-id="${account.id}">
-                        <i data-lucide="heart" 
-                            class="w-5 h-5 transition-colors ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-400'}">
-                        </i>
-                    </button>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
+    return `
+        <div class="account-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer fade-in flex flex-col" data-account-id="${account.id}">
+        <div class="relative">
+            <img src="${account.image_url}" alt="${account.account_name}" class="w-full h-48 object-cover">
+            <button 
+            class="favorite-btn absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg bg-white/90 text-gray-600 hover:bg-white hover:scale-110" 
+            data-account-id="${account.id}">
+            <i data-lucide="heart" 
+                class="w-5 h-5 transition-colors ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-400'}">
+            </i>
+            </button>
+        </div>
+        <div class="p-4 flex flex-col flex-grow">
+            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${account.account_name}</h3>
 
-                    <!-- ✅ タグ（カテゴリバッジ）を削除 -->
-                    
-                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">${account.description || ''}</p>
+            <p class="text-gray-600 text-sm mb-3 line-clamp-2">${account.description || ''}</p>
 
-                    <div class="mt-auto">
-                        <div class="flex items-center text-orange-600 font-medium mb-3">
-                            <i data-lucide="gift" class="w-4 h-4 mr-1"></i>
-                            <span class="text-sm">${account.line_benefits || ''}</span>
-                        </div>
+            <!-- 🎁 特典エリアを詳細画面と統一 -->
+            ${account.line_benefits ? `
+            <div class="bg-gradient-to-r from-green-100 via-green-50 to-green-100 border border-green-400 rounded-lg p-3 text-center shadow-sm mb-3">
+            <div class="flex items-center justify-center gap-2 mb-1">
+                <i data-lucide='gift' class='w-4 h-4 text-green-700'></i>
+                <span class="text-sm font-bold text-green-800">LINE友だち追加特典</span>
+            </div>
+            <p class="text-green-900 font-semibold text-sm">${account.line_benefits}</p>
+            </div>` : ''}
 
-                        <div class="text-center flex justify-center gap-3">
-                            ${account.line_id ? `
-                                <a href="https://line.me/R/ti/p/@${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
-                                    <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
-                                        alt="友だち追加" class="inline-block w-[160px] h-auto mx-auto">
-                                </a>` : ''}
+            <div class="mt-auto text-center flex justify-center gap-3">
+            ${account.line_id ? `
+                <a href="https://line.me/R/ti/p/@${account.line_id}" target="_blank" rel="noopener noreferrer" class="inline-block">
+                <img id="line_add" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+                    alt="友だち追加" class="inline-block w-[160px] h-auto mx-auto">
+                </a>` : ''}
 
-                            ${account.instagram_url ? `
-                                <a href="${account.instagram_url}" target="_blank" rel="noopener noreferrer" class="insta_btn2">
-                                    <i class="fab fa-instagram"></i> <span>Instagram</span>
-                                </a>` : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>`;
+            ${account.instagram_url ? `
+                <a href="${account.instagram_url}" target="_blank" rel="noopener noreferrer" class="insta_btn2">
+                <i class="fab fa-instagram"></i> 
+                <span>Instagram</span>
+                </a>` : ''}
+            </div>
+        </div>
+        </div>`;
     }
 
     bindEvents() {
