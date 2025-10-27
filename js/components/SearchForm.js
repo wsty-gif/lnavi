@@ -17,7 +17,7 @@ class SearchForm {
         this.onSearch = options.onSearch || (() => {});
         this.allAccounts = [];
         this.showFilters = false;
-        
+
         this.init();
     }
 
@@ -36,6 +36,8 @@ class SearchForm {
             <div class="border-2 border-orange-200 shadow-2xl bg-white rounded-2xl overflow-hidden">
                 <div class="p-6 md:p-8">
                     <div class="space-y-6">
+
+                        <!-- タイトル -->
                         <div class="text-center mb-6">
                             <h2 class="text-gray-900 mb-2 text-sm font-black md:text-3xl">
                                 初回割引、ポイント還元、限定クーポン…<br>
@@ -44,7 +46,7 @@ class SearchForm {
                             <p class="text-gray-600 font-medium">エリアとサービスから検索できます</p>
                         </div>
 
-                        <!-- 地域とカテゴリ -->
+                        <!-- 地域・カテゴリ -->
                         <div class="search-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-end">
                             <div class="space-y-4">
                                 <label class="text-sm font-bold text-gray-700">都道府県</label>
@@ -178,14 +180,32 @@ class SearchForm {
     }
 
     getAvailableCities() {
-        if (!this.filters.prefecture || this.filters.prefecture === "全て")
-            return ["全て", ...new Set(this.allAccounts.map(a => a.city).filter(Boolean)).sort()];
-        return ["全て", ...new Set(this.allAccounts.filter(a => a.prefecture === this.filters.prefecture).map(a => a.city).filter(Boolean)).sort()];
+        if (!this.filters.prefecture || this.filters.prefecture === "全て") {
+            const cities = [...new Set(this.allAccounts.map(a => a.city).filter(Boolean))];
+            return ["全て", ...cities.sort()];
+        }
+
+        const cities = [...new Set(
+            this.allAccounts
+                .filter(a => a.prefecture === this.filters.prefecture)
+                .map(a => a.city)
+                .filter(Boolean)
+        )];
+        return ["全て", ...cities.sort()];
     }
 
     getAvailableAreas() {
-        if (!this.filters.city || this.filters.city === "全て")
-            return ["全て", ...new Set(this.allAccounts.map(a => a.area).filter(Boolean)).sort()];
-        return ["全て", ...new Set(this.allAccounts.filter(a => a.city === this.filters.city).map(a => a.area).filter(Boolean)).sort()];
+        if (!this.filters.city || this.filters.city === "全て") {
+            const areas = [...new Set(this.allAccounts.map(a => a.area).filter(Boolean))];
+            return ["全て", ...areas.sort()];
+        }
+
+        const areas = [...new Set(
+            this.allAccounts
+                .filter(a => a.city === this.filters.city)
+                .map(a => a.area)
+                .filter(Boolean)
+        )];
+        return ["全て", ...areas.sort()];
     }
 }

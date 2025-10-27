@@ -119,33 +119,81 @@ class LineAccountSearchApp {
             let accounts = await DataService.getAllAccounts();
 
             accounts = accounts.filter(acc => {
+                // -------------------------
+                // 🗾 地域・カテゴリフィルター
+                // -------------------------
                 if (filters.prefecture !== "全て" && acc.prefecture !== filters.prefecture) return false;
                 if (filters.city !== "全て" && acc.city !== filters.city) return false;
                 if (filters.area !== "全て" && acc.area !== filters.area) return false;
                 if (filters.category_main !== "全て" && acc.service_category_main !== filters.category_main) return false;
                 if (filters.category_detail !== "全て" && acc.service_category_detail !== filters.category_detail) return false;
 
+                // -------------------------
+                // 🔍 キーワード検索
+                // -------------------------
                 if (filters.keyword && !(
-                    acc.account_name?.toLowerCase().includes(filters.keyword) ||
-                    acc.description?.toLowerCase().includes(filters.keyword)
+                    (acc.account_name && acc.account_name.toLowerCase().includes(filters.keyword.toLowerCase())) ||
+                    (acc.description && acc.description.toLowerCase().includes(filters.keyword.toLowerCase()))
                 )) return false;
 
-                // ✅ こだわり条件
-                if (filters.has_line_benefit && !acc.line_benefits) return false;
-                if (filters.is_recommended && acc.is_recommended !== true) return false;
-                if (filters.has_instagram && !acc.instagram_url) return false;
-                if (filters.can_reserve_online && !(acc.line_features?.includes("LINEから予約可能"))) return false;
+                // -------------------------
+                // 🎯 こだわり条件フィルター
+                // -------------------------
+
+                // 1️⃣ LINE友だち特典あり
+                if (filters.has_line_benefit && (!acc.line_benefits || acc.line_benefits.trim() === "")) return false;
+
+                // 2️⃣ おすすめ店舗のみ（true / FALSE / "TRUE" どれでもOK）
+                if (filters.is_recommended && acc.is_recommended !== true && acc.is_recommended !== "TRUE") return false;
+
+                // 3️⃣ Instagramあり
+                if (filters.has_instagram && (!acc.instagram_url || acc.instagram_url.trim() === "")) return false;
+
+                // 4️⃣ LINEから予約可能（line_features配列に"LINEから予約可能"を含む）
+                if (filters.can_reserve_online) {
+                    const features = Array.isArray(acc.line_features)
+                        ? acc.line_features
+                        : (acc.line_features ? JSON.parse(acc.line_features) : []);
+                    if (!features.includes("LINEから予約可能")) return false;
+                }
 
                 return true;
             });
 
-            this.searchResults.setAccounts(accounts);
+            // ✅ 検索結果が0件だった場合、提案メッセージを表示
+            if (accounts.length === 0) {
+                this.searchResults.showSuggestionMessage(`
+                    <div class="text-center bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">該当する店舗が見つかりませんでした。</h3>
+                        <p class="text-gray-600 mb-4">人気の条件で再検索してみませんか？</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button class="suggestion-btn" data-filter="has_line_benefit">🎁 LINE特典あり</button>
+                            <button class="suggestion-btn" data-filter="is_recommended">⭐ おすすめ店舗</button>
+                            <button class="suggestion-btn" data-filter="has_instagram">📸 Instagramあり</button>
+                            <button class="suggestion-btn" data-filter="can_reserve_online">📅 LINEから予約</button>
+                        </div>
+                    </div>
+                `);
+
+                // ✅ ボタンイベント登録（提案条件をONにして再検索）
+                document.querySelectorAll('.suggestion-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const key = btn.dataset.filter;
+                        filters[key] = true;
+                        this.handleSearch(filters); // 再検索
+                    });
+                });
+            } else {
+                this.searchResults.setAccounts(accounts);
+            }
 
         } catch (err) {
             console.error("Search failed:", err);
             this.searchResults.show([]);
         }
     }
+
+
 
 handleToggleFavorite(accountId, source = "search") {
     const id = String(accountId);

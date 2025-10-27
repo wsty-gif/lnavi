@@ -17,6 +17,17 @@ class SearchResults {
         this.bindEvents();
     }
 
+    // 🔧 検索結果 0件時の提案メッセージを表示
+    showSuggestionMessage(html) {
+        this.container.innerHTML = `
+            <div class="p-6 flex justify-center">
+                <div class="max-w-md w-full">
+                    ${html}
+                </div>
+            </div>
+        `;
+    }
+
     showLoading() {
         this.isLoading = true;
         this.render();
