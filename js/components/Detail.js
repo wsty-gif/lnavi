@@ -72,11 +72,9 @@ class Detail {
                                 allImages.length > 0
                                     ? `
                                 <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                                    <div class="relative">
-                                        <img src="${allImages[this.currentImageIndex]}" alt="${this.account.account_name}"
-                                             class="w-full h-96 object-cover"
-                                             onerror="this.src='https://via.placeholder.com/800x600?text=No+Image';">
-                                    </div>
+                                    <img src="${allImages[this.currentImageIndex]}" alt="${this.account.account_name}"
+                                         class="w-full h-96 object-cover"
+                                         onerror="this.src='https://via.placeholder.com/800x600?text=No+Image';">
                                 </div>`
                                     : ""
                             }
@@ -118,14 +116,16 @@ class Detail {
 
                                 <p class="text-gray-700 leading-relaxed">${this.account.description || ""}</p>
 
+                                <!-- LINE友だち追加特典 -->
                                 ${
                                     this.account.line_benefits
                                         ? `
-                                    <div class="bg-gradient-to-r from-green-100 via-green-50 to-green-100 border border-green-300 rounded-lg p-4 shadow-md text-center">
-                                        <div class="flex items-center justify-center gap-2 text-green-800 font-bold text-base">
-                                            <i data-lucide='gift' class='w-5 h-5 text-green-700'></i>
-                                            <span>${this.account.line_benefits}</span>
+                                    <div class="bg-gradient-to-r from-green-100 via-green-50 to-green-100 border border-green-400 rounded-xl p-5 shadow-md text-center">
+                                        <div class="flex items-center justify-center gap-2 mb-2">
+                                            <i data-lucide='gift' class='w-6 h-6 text-green-700'></i>
+                                            <span class="text-lg font-bold text-green-800">LINE友だち追加特典</span>
                                         </div>
+                                        <p class="text-green-900 font-semibold text-base">${this.account.line_benefits}</p>
                                     </div>`
                                         : ""
                                 }
@@ -144,7 +144,7 @@ class Detail {
                                         </div>`
                                             : ""
                                     }
-                                    
+
                                     ${
                                         this.account.business_hours
                                             ? `
@@ -157,7 +157,7 @@ class Detail {
                                         </div>`
                                             : ""
                                     }
-                                    
+
                                     ${
                                         this.account.closed_days
                                             ? `
@@ -170,7 +170,7 @@ class Detail {
                                         </div>`
                                             : ""
                                     }
-                                    
+
                                     ${
                                         this.account.website_url
                                             ? `
@@ -178,25 +178,12 @@ class Detail {
                                             <i data-lucide="external-link" class="w-5 h-5 text-gray-400"></i>
                                             <div>
                                                 <p class="text-sm text-gray-500">ウェブサイト</p>
-                                                <a href="${this.account.website_url}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline">
-                                                    サイトを見る
-                                                </a>
+                                                <a href="${this.account.website_url}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline">サイトを見る</a>
                                             </div>
                                         </div>`
                                             : ""
                                     }
                                 </div>
-
-                                ${
-                                    this.account.address || this.account.prefecture
-                                        ? `
-                                    <div class="pt-4 border-t">
-                                        <button class="directions-btn w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50">
-                                            <i data-lucide="navigation" class="w-4 h-4"></i>ルート案内（Googleマップで開く）
-                                        </button>
-                                    </div>`
-                                        : ""
-                                }
                             </div>
                         </div>
 
@@ -230,7 +217,7 @@ class Detail {
         if (typeof lucide !== "undefined") lucide.createIcons();
     }
 
-    // 以下の関数は変更なし
+    // 以下、イベント関連などは変更なし
     bindEvents() {
         this.bindCloseEvent();
         this.bindFavoriteEvent();
@@ -239,40 +226,27 @@ class Detail {
         this.bindLineAddEvent();
         this.bindDirectionsEvent();
     }
-
     bindCloseEvent() {
         const closeBtn = this.container.querySelector(".close-btn");
         if (closeBtn) closeBtn.addEventListener("click", () => this.onClose());
     }
-
     bindFavoriteEvent() {
         const favoriteBtn = this.container.querySelector(".favorite-btn");
         if (favoriteBtn) favoriteBtn.addEventListener("click", () => this.toggleFavorite());
     }
-
     bindShareEvent() {
         const shareBtn = this.container.querySelector(".share-btn");
         if (shareBtn) shareBtn.addEventListener("click", () => this.handleShare());
     }
-
     bindImageEvents() {
-        this.container.querySelectorAll(".image-indicator").forEach((indicator) => {
-            indicator.addEventListener("click", (e) => {
-                this.currentImageIndex = parseInt(e.target.dataset.index);
-                this.render();
-                this.bindEvents();
-            });
-        });
-
-        this.container.querySelectorAll(".thumbnail").forEach((thumbnail) => {
-            thumbnail.addEventListener("click", (e) => {
+        this.container.querySelectorAll(".image-indicator, .thumbnail").forEach((el) => {
+            el.addEventListener("click", (e) => {
                 this.currentImageIndex = parseInt(e.target.dataset.index);
                 this.render();
                 this.bindEvents();
             });
         });
     }
-
     bindLineAddEvent() {
         const lineAddBtn = this.container.querySelector(".line-add-btn");
         if (lineAddBtn)
@@ -280,7 +254,6 @@ class Detail {
                 window.open(`https://line.me/R/ti/p/@${this.account.line_id}`, "_blank");
             });
     }
-
     bindDirectionsEvent() {
         const directionsBtn = this.container.querySelector(".directions-btn");
         if (directionsBtn)
