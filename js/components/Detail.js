@@ -128,11 +128,6 @@ class Detail {
                                         <div class="flex-1">
                                             <div class="flex items-center gap-1 mb-1">
                                                 <h1 class="text-2xl font-bold text-gray-900">${this.account.account_name}</h1>
-                                                ${
-                                                    this.account.is_verified
-                                                        ? `<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>`
-                                                        : ""
-                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -229,20 +224,27 @@ class Detail {
                         <!-- サイドバー -->
                         <div class="space-y-4">
                             <div class="bg-white rounded-lg shadow-sm sticky top-3">
-                                <div class="p-4 text-center">
-                                    <!-- ✅ 横並び配置 -->
-                                    <div class="detail-btn-group flex justify-center items-center gap-3">
-                                        <a href="https://line.me/R/ti/p/@${this.account.line_id}" target="_blank" rel="noopener noreferrer" class="line-add-btn">
-                                            <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" class="w-full h-auto rounded-[7px]">
-                                        </a>
-                                        ${
-                                            this.account.instagram_url
-                                                ? `<a href="${this.account.instagram_url}" target="_blank" rel="noopener noreferrer" class="insta_btn2">
-                                                    <i class="fab fa-instagram"></i><span>Instagram</span>
-                                                </a>` : ""
-                                        }
-                                    </div>
+                            <div class="p-4 text-center overflow-x-hidden"> <!-- ✅ 横スクロール防止 -->
+                                <!-- ✅ 横並びエリア -->
+                                <div class="flex justify-center items-center gap-3 flex-wrap overflow-x-hidden w-full max-w-full">
+                                <!-- LINEボタン -->
+                                <a href="https://line.me/R/ti/p/@${this.account.line_id}" 
+                                    target="_blank" rel="noopener noreferrer" 
+                                    class="line-add-btn w-[190px]">
+                                    <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" 
+                                        alt="友だち追加" class="w-full h-auto rounded-[7px]">
+                                </a>
+
+                                <!-- Instagramボタン（横幅をLINEと統一） -->
+                                ${this.account.instagram_url ? `
+                                <a href="${this.account.instagram_url}" 
+                                    target="_blank" rel="noopener noreferrer" 
+                                    class="insta_btn2 w-[190px]">
+                                    <i class="fab fa-instagram"></i> 
+                                    <span>Instagram</span>
+                                </a>` : ''}
                                 </div>
+                            </div>
                             </div>
                         </div>
 
