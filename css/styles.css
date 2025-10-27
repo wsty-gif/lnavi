@@ -664,3 +664,32 @@ html, body {
   justify-content: flex-start !important;
   margin-left: 0 !important;
 }
+
+/* ✅ こだわり条件の左揃え・最終安定版 */
+#filters-content .flex.flex-col.gap-3 {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+#filters-content label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+#filters-content input[type="checkbox"] {
+  margin-left: 0 !important;
+}
+
+/* ✅ 見出しとセレクトボックスの間隔を詰める */
+#search-form label.text-sm.font-bold.text-gray-700 {
+  margin-bottom: 2px !important;  /* ← これで見出しとセレクトの距離が縮まる */
+  display: block;
+}
+
+#search-form select {
+  margin-top: 0 !important;
+}

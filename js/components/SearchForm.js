@@ -48,24 +48,24 @@ class SearchForm {
 
                         <!-- 地域・カテゴリ -->
                         <div class="search-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-end">
-                            <div class="space-y-4">
-                                <label class="text-sm font-bold text-gray-700">都道府県</label>
+                            <div class="space-y-3">
+                                <label class="text-sm font-bold text-gray-700 mb-1">都道府県</label>
                                 <select id="prefecture-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300">
                                     ${PREFECTURES.map(pref => `
                                         <option value="${pref}" ${pref === this.filters.prefecture ? 'selected' : ''}>${pref}</option>
                                     `).join('')}
                                 </select>
 
-                                <label class="text-sm font-bold text-gray-700">市区町村</label>
-                                <select id="city-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300" 
+                                <label class="text-sm font-bold text-gray-700 mb-1">市区町村</label>
+                                <select id="city-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300"
                                         ${!this.filters.prefecture || this.filters.prefecture === '全て' ? 'disabled' : ''}>
                                     ${availableCities.map(city => `
                                         <option value="${city}" ${city === this.filters.city ? 'selected' : ''}>${city}</option>
                                     `).join('')}
                                 </select>
 
-                                <label class="text-sm font-bold text-gray-700">エリア</label>
-                                <select id="area-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300" 
+                                <label class="text-sm font-bold text-gray-700 mb-1">エリア</label>
+                                <select id="area-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300"
                                         ${!this.filters.city || this.filters.city === '全て' ? 'disabled' : ''}>
                                     ${availableAreas.map(area => `
                                         <option value="${area}" ${area === this.filters.area ? 'selected' : ''}>${area}</option>
@@ -73,15 +73,15 @@ class SearchForm {
                                 </select>
                             </div>
 
-                            <div class="space-y-4">
-                                <label class="text-sm font-bold text-gray-700">サービスカテゴリー</label>
+                            <div class="space-y-3">
+                                <label class="text-sm font-bold text-gray-700 mb-1">サービスカテゴリー</label>
                                 <select id="category-main-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300">
                                     ${MAIN_CATEGORIES.map(category => `
                                         <option value="${category}" ${category === this.filters.category_main ? 'selected' : ''}>${category}</option>
                                     `).join('')}
                                 </select>
 
-                                <label class="text-sm font-bold text-gray-700">詳細カテゴリー</label>
+                                <label class="text-sm font-bold text-gray-700 mb-1">詳細カテゴリー</label>
                                 <select id="category-detail-select" class="custom-select w-full h-12 rounded-lg px-4 border-2 border-gray-300"
                                         ${!this.filters.category_main || this.filters.category_main === '全て' ? 'disabled' : ''}>
                                     ${availableDetailCategories.map(category => `
@@ -110,7 +110,7 @@ class SearchForm {
                         <div id="filters-content" class="${this.showFilters ? '' : 'hidden'} bg-orange-50 p-4 rounded-lg space-y-3 border-2 border-orange-200">
                             <p class="font-bold text-gray-800 mb-3">こだわり条件</p>
 
-                            <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-3 items-start">
                                 <label class="flex items-center gap-2 text-base font-medium">
                                     <input type="checkbox" id="has_line_benefit" class="custom-checkbox w-5 h-5" ${this.filters.has_line_benefit ? 'checked' : ''}>
                                     🎁 LINE友だち特典あり
@@ -159,32 +159,75 @@ class SearchForm {
         set('has_instagram', 'has_instagram');
         set('can_reserve', 'can_reserve_online');
 
-        this.container.querySelector('#toggle-filters').addEventListener('click', () => {
+        const toggleBtn = this.container.querySelector('#toggle-filters');
+        toggleBtn.addEventListener('click', () => {
             this.showFilters = !this.showFilters;
             this.render();
             this.bindEvents();
         });
 
-        this.container.querySelector('#search-btn').addEventListener('click', () => {
+        const searchBtn = this.container.querySelector('#search-btn');
+        searchBtn.addEventListener('click', () => {
             this.onSearch(this.filters);
         });
 
         const keywordInput = this.container.querySelector('#keyword-input');
         keywordInput.addEventListener('input', (e) => this.filters.keyword = e.target.value);
-    }
 
-    getAvailableDetailCategories() {
-        if (!this.filters.category_main || this.filters.category_main === "全て")
-            return ["全て"];
-        return ["全て", ...(DETAIL_CATEGORIES[this.filters.category_main] || [])];
-    }
+        // 都道府県選択
+        const prefectureSelect = this.container.querySelector('#prefecture-select');
+        prefectureSelect.addEventListener('change', (e) => {
+            this.filters.prefecture = e.target.value;
+            this.filters.city = "全て";
+            this.filters.area = "全て";
+            this.render();
+            this.bindEvents();
+        });
 
-    getAvailableCities() {
-        if (!this.filters.prefecture || this.filters.prefecture === "全て") {
-            const cities = [...new Set(this.allAccounts.map(a => a.city).filter(Boolean))];
-            return ["全て", ...cities.sort()];
+        // 市区町村選択
+        const citySelect = this.container.querySelector('#city-select');
+        if (citySelect) {
+            citySelect.addEventListener('change', (e) => {
+                this.filters.city = e.target.value;
+                this.filters.area = "全て";
+                this.render();
+                this.bindEvents();
+            });
         }
 
+        // エリア選択
+        const areaSelect = this.container.querySelector('#area-select');
+        if (areaSelect) {
+            areaSelect.addEventListener('change', (e) => {
+                this.filters.area = e.target.value;
+            });
+        }
+
+        // メインカテゴリ選択
+        const categoryMainSelect = this.container.querySelector('#category-main-select');
+        if (categoryMainSelect) {
+            categoryMainSelect.addEventListener('change', (e) => {
+                this.filters.category_main = e.target.value;
+                this.filters.category_detail = "全て";
+                this.render();
+                this.bindEvents();
+            });
+        }
+
+        // 詳細カテゴリ選択
+        const categoryDetailSelect = this.container.querySelector('#category-detail-select');
+        if (categoryDetailSelect) {
+            categoryDetailSelect.addEventListener('change', (e) => {
+                this.filters.category_detail = e.target.value;
+            });
+        }
+    }
+
+    // ▼ 都道府県→市区町村→エリアの連動ロジック
+    getAvailableCities() {
+        if (!this.filters.prefecture || this.filters.prefecture === "全て") {
+            return ["全て"];
+        }
         const cities = [...new Set(
             this.allAccounts
                 .filter(a => a.prefecture === this.filters.prefecture)
@@ -196,16 +239,31 @@ class SearchForm {
 
     getAvailableAreas() {
         if (!this.filters.city || this.filters.city === "全て") {
-            const areas = [...new Set(this.allAccounts.map(a => a.area).filter(Boolean))];
+            const areas = [...new Set(
+                this.allAccounts
+                    .filter(a => a.prefecture === this.filters.prefecture)
+                    .map(a => a.area)
+                    .filter(Boolean)
+            )];
             return ["全て", ...areas.sort()];
         }
 
         const areas = [...new Set(
             this.allAccounts
-                .filter(a => a.city === this.filters.city)
+                .filter(a =>
+                    a.prefecture === this.filters.prefecture &&
+                    a.city === this.filters.city
+                )
                 .map(a => a.area)
                 .filter(Boolean)
         )];
         return ["全て", ...areas.sort()];
+    }
+
+    getAvailableDetailCategories() {
+        if (!this.filters.category_main || this.filters.category_main === "全て") {
+            return ["全て"];
+        }
+        return ["全て", ...(DETAIL_CATEGORIES[this.filters.category_main] || [])];
     }
 }
