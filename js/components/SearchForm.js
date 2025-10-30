@@ -126,7 +126,7 @@ class SearchForm {
                                 </label>
 
                                 <label class="flex items-center gap-2 text-base font-medium">
-                                    <input type="checkbox" id="can_reserve" class="custom-checkbox w-5 h-5" ${this.filters.can_reserve_online ? 'checked' : ''}>
+                                    <input type="checkbox" id="can_reserve_online" class="custom-checkbox w-5 h-5" ${this.filters.can_reserve_online ? 'checked' : ''}>
                                     📅 LINEから予約可能
                                 </label>
                             </div>
@@ -156,7 +156,7 @@ class SearchForm {
         set('has_line_benefit', 'has_line_benefit');
         set('is_recommended', 'is_recommended');
         set('has_instagram', 'has_instagram');
-        set('can_reserve', 'can_reserve_online');
+        set('can_reserve_online', 'can_reserve_online');
 
         const toggleBtn = this.container.querySelector('#toggle-filters');
         toggleBtn.addEventListener('click', () => {

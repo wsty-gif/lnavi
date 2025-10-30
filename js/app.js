@@ -139,13 +139,14 @@ async handleSearch(filters) {
       if (filters.has_line_benefit && (!acc.line_benefits || acc.line_benefits.trim() === "")) return false;
       if (filters.is_recommended && !(acc.is_recommended === true || acc.is_recommended === "TRUE")) return false;
       if (filters.has_instagram && (!acc.instagram_url || acc.instagram_url.trim() === "")) return false;
+      if (filters.can_reserve_online && !(acc.can_reserve_online === true || acc.can_reserve_online === "TRUE")) return false;
 
-      if (filters.can_reserve_online) {
-        const features = Array.isArray(acc.line_features)
-          ? acc.line_features
-          : (acc.line_features ? JSON.parse(acc.line_features) : []);
-        if (!features.includes("LINEから予約可能")) return false;
-      }
+    //   if (filters.can_reserve_online) {
+    //     const features = Array.isArray(acc.line_features)
+    //       ? acc.line_features
+    //       : (acc.line_features ? JSON.parse(acc.line_features) : []);
+    //     if (!features.includes("LINEから予約可能")) return false;
+    //   }
 
       return true;
     });
